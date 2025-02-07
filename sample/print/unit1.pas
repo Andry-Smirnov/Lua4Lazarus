@@ -1,4 +1,4 @@
-unit Unit1; 
+unit Unit1;
 
 {$mode objfpc}{$H+}
 
@@ -28,10 +28,10 @@ type
     { private declarations }
   public
     { public declarations }
-  end; 
+  end;
 
 var
-  Form1: TForm1; 
+  Form1: TForm1;
 
 implementation
 uses

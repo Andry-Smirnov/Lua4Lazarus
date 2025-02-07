@@ -558,7 +558,7 @@ procedure lua_rotate(L: Plua_State; idx, n: Integer); cdecl; external LUA_LIB_NA
 
 procedure lua_remove(L: Plua_State; idx: Integer);
 begin
-   lua_rotate(L, idx, -1); 
+   lua_rotate(L, idx, -1);
    lua_pop(L, 1);
 end;
 
