@@ -86,25 +86,30 @@ var
   i: Integer;
 begin
   i:= LP.PageCount;
-  if i > 0 then begin
-    ScrollBar.SetParams(1, 1, i);
-    ScrollBar.Enabled:= i > 1;
-    SetPageInfo;
-  end else begin
-    Panel1.Visible:= False;
-    Image.Visible:= False;
-  end;
+  if i > 0 then
+    begin
+      ScrollBar.SetParams(1, 1, i);
+      ScrollBar.Enabled:= i > 1;
+      SetPageInfo;
+    end
+  else
+    begin
+      Panel1.Visible:= False;
+      Image.Visible:= False;
+    end;
 
   ComboZoom.ItemIndex:= 11;
   ComboZoomSelect(nil);
-  if Zoom < 80 then begin
-    ComboZoom.ItemIndex:= 10;
-    ComboZoomSelect(nil);
-    if Zoom > 100 then begin
-      ComboZoom.ItemIndex:= 5;
+  if Zoom < 80 then
+    begin
+      ComboZoom.ItemIndex:= 10;
       ComboZoomSelect(nil);
+      if Zoom > 100 then
+        begin
+          ComboZoom.ItemIndex:= 5;
+          ComboZoomSelect(nil);
+        end;
     end;
-  end;
 end;
 
 procedure TFormPreview.FormMouseDown(Sender: TObject; Button: TMouseButton;
@@ -112,12 +117,14 @@ procedure TFormPreview.FormMouseDown(Sender: TObject; Button: TMouseButton;
 begin
   if ((Button = mbLeft) or (Button = mbMiddle)) and
    ((ScrollBox.ClientWidth < Image.Width) or
-   (ScrollBox.ClientHeight < Image.Height)) then begin
+   (ScrollBox.ClientHeight < Image.Height)) then
+   begin
     GetCursorPos(DragPoint);
     Mouse.Capture := Self.Handle;
     DragImage := True;
     Screen.Cursor := crSize;
-  end else if (Button = mbRight) then begin
+  end else if (Button = mbRight) then
+  begin
     GetCursorPos(DragPoint);
     MovePage := True;
     Mouse.Capture := Self.Handle;
@@ -130,35 +137,45 @@ procedure TFormPreview.FormMouseMove(Sender: TObject; Shift: TShiftState; X,
 var
   p: TPoint;
 begin
-  if DragImage then begin
-    GetCursorPos(p{%H-});
-    if p.X > DragPoint.X then begin
-      ScrollBox.HorzScrollBar.Position:=
-       ScrollBox.HorzScrollBar.Position - (p.X - Dragpoint.X);
+  if DragImage then
+    begin
+      GetCursorPos(p{%H-});
+      if p.X > DragPoint.X then
+        begin
+          ScrollBox.HorzScrollBar.Position:=
+            ScrollBox.HorzScrollBar.Position - (p.X - Dragpoint.X);
+        end;
+      if p.X < DragPoint.X then
+        begin
+          ScrollBox.HorzScrollBar.Position:=
+            ScrollBox.HorzScrollBar.Position + (Dragpoint.X - p.X);
+        end;
+      if p.Y > DragPoint.Y then
+        begin
+          ScrollBox.VertScrollBar.Position:=
+            ScrollBox.VertScrollBar.Position - (p.Y - Dragpoint.Y);
+        end;
+      if p.Y < DragPoint.Y then
+        begin
+          ScrollBox.VertScrollBar.Position:=
+          ScrollBox.VertScrollBar.Position + (Dragpoint.Y - p.Y);
+        end;
+      DragPoint := p;
+    end
+  else if MovePage then
+    begin
+      GetCursorPos(p);
+      if p.X > DragPoint.X+30 then
+        begin
+          ScrollBar.Position := ScrollBar.Position + 1;
+          DragPoint := p;
+        end
+      else if p.X < DragPoint.X-30 then
+        begin
+          ScrollBar.Position := ScrollBar.Position - 1;
+          DragPoint := p;
+        end;
     end;
-    if p.X < DragPoint.X then begin
-      ScrollBox.HorzScrollBar.Position:=
-       ScrollBox.HorzScrollBar.Position + (Dragpoint.X - p.X);
-    end;
-    if p.Y > DragPoint.Y then begin
-      ScrollBox.VertScrollBar.Position:=
-       ScrollBox.VertScrollBar.Position - (p.Y - Dragpoint.Y);
-    end;
-    if p.Y < DragPoint.Y then begin
-      ScrollBox.VertScrollBar.Position:=
-       ScrollBox.VertScrollBar.Position + (Dragpoint.Y - p.Y);
-    end;
-    DragPoint:= p;
-  end else if MovePage then begin
-    GetCursorPos(p);
-    if p.X > DragPoint.X+30 then begin
-      ScrollBar.Position := ScrollBar.Position + 1;
-      DragPoint:= p;
-    end else if p.X < DragPoint.X-30 then begin
-      ScrollBar.Position := ScrollBar.Position - 1;
-      DragPoint:= p;
-    end;
-  end;
 end;
 
 procedure TFormPreview.FormMouseUp(Sender: TObject; Button: TMouseButton;
@@ -185,20 +202,20 @@ begin
   ph:= LP.PaperSize.cy;
   with Image do begin
     case ComboZoom.ItemIndex of
-      0: Zoom:= 500;
-      1: Zoom:= 400;
-      2: Zoom:= 300;
-      3: Zoom:= 200;
-      4: Zoom:= 150;
-      5: Zoom:= 100;
-      6: Zoom:= 75;
-      7: Zoom:= 50;
-      8: Zoom:= 25;
-      9: Zoom:= 10;
+      0: Zoom := 500;
+      1: Zoom := 400;
+      2: Zoom := 300;
+      3: Zoom := 200;
+      4: Zoom := 150;
+      5: Zoom := 100;
+      6: Zoom := 75;
+      7: Zoom := 50;
+      8: Zoom := 25;
+      9: Zoom := 10;
       10: begin
         // Page width(ページ幅を基準に)
         Image.SetBounds(0, 0, 1, ScrollBox.ClientHeight+100);
-        Zoom:= ScrollBox.ClientWidth * LP.dpi * 100 div (pw * dpi) - 1;
+        Zoom := ScrollBox.ClientWidth * LP.dpi * 100 div (pw * dpi) - 1;
       end;
       11: begin
         // Whole page(ページ全体を表示)
@@ -206,17 +223,17 @@ begin
         aspect:= LP.PageSize.cx / LP.PageSize.cy;
         w:= ScrollBox.ClientWidth;
         h:= Trunc(w / aspect);
-        Zoom:= w * LP.dpi * 100 div (pw * dpi) - 1;
+        Zoom := w * LP.dpi * 100 div (pw * dpi) - 1;
         if h > ScrollBox.ClientHeight then begin
           h:= ScrollBox.ClientHeight;
-          Zoom:= h * LP.dpi * 100 div (ph * dpi) - 1;
+          Zoom := h * LP.dpi * 100 div (ph * dpi) - 1;
         end;
       end;
       else begin
         s:= ComboZoom.Text;
         if (s <> '') and (s[Length(s)] = '%') then s:= Copy(s, 1, Length(s) - 1);
         i:= StrToIntDef(s, 0);
-        if (i >= 10) and (i <= 1000) then Zoom:= i;
+        if (i >= 10) and (i <= 1000) then Zoom := i;
       end;
     end;
 

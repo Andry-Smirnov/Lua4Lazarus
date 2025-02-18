@@ -121,7 +121,8 @@ begin
       luaopen_base(L);
       //luaopen_string(L);
       //lua_register(L, 'CreateStringsObject', @CreateStringsObject);
-      l4l_PushLuaObject(TLuaPrintObject.Create(L, lp)); lua_setglobal(L, 'P');
+      l4l_PushLuaObject(TLuaPrintObject.Create(L, lp));
+      lua_setglobal(L, 'P');
       try
         lp.BeginDoc(Rect(2000, 3000, 2000, 3000));
         try
@@ -130,17 +131,20 @@ begin
           lp.EndDoc;
         end;
 
-        if Sender = Button1 then begin
-          lp.Print;
-        end else begin
-          FormPreview:= TFormPreview.Create(Self);
-          try
-            FormPreview.LP:= lp;
-            FormPreView.ShowModal;
-          finally
-            FormPreview.Free;
+        if Sender = Button1 then
+          begin
+            lp.Print;
+          end
+        else
+          begin
+            FormPreview:= TFormPreview.Create(Self);
+            try
+              FormPreview.LP:= lp;
+              FormPreView.ShowModal;
+            finally
+              FormPreview.Free;
+            end;
           end;
-        end;
 
       except
         ShowMessage(lua_tostring(L, -1));

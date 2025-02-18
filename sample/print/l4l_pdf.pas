@@ -639,7 +639,9 @@ var
 
   function matrixmul(m1, m2: TMatrix): TMatrix;
   var
-    i, j, k: Integer;
+    i: Integer;
+  j: Integer;
+  k: Integer;
   begin
     for i:=1 to 3 do begin
       for j:=1 to 3 do begin
@@ -1054,14 +1056,14 @@ var
                 s := '';
               end;
 
-              m1[1][1] := Tfs * Th; 
-              m1[1][2] := 0;   
+              m1[1][1] := Tfs * Th;
+              m1[1][2] := 0;  
               m1[1][3] := 0;
-              m1[2][1] := 0;          
-              m1[2][2]:=Tfs; 
+              m1[2][1] := 0;         
+              m1[2][2]:=Tfs;
               m1[2][3] := 0;
-              m1[3][1] := 0;         
-              m1[3][2] := Trise; 
+              m1[3][1] := 0;        
+              m1[3][2] := Trise;
               m1[3][3] := 1;
               m2 := matrixmul(m1, Tm);
               LPO.LuaPrint.AddOrder(Format(PRUN_NAME + '.font_height(%d)',
@@ -1194,7 +1196,9 @@ var
 var
   pdfr: TPDFReader;
   pageobj, pdfobj, pdfobj2: TPDFObj;
-  i, j, k: Integer;
+  i: Integer;
+  j: Integer;
+  k: Integer;
   s, s1: string;
   sp1: PChar;
   sl: TStringList; // for debug

@@ -445,14 +445,14 @@ const
    LUA_NOREF  = -2;
    LUA_REFNIL = -1;
 
-   LUAL_NUMSIZES = sizeof(lua_Integer)*16 + sizeof(lua_Number);
+   LUAL_NUMSIZES = SizeOf(lua_Integer)*16 + SizeOf(lua_Number);
 
 type
-   luaL_Reg = packed record
-      name: PAnsiChar;
-      func: lua_CFunction;
-   end;
-   PluaL_Reg = ^luaL_Reg;
+  luaL_Reg = packed record
+    name: PAnsiChar;
+    func: lua_CFunction;
+  end;
+  PluaL_Reg = ^luaL_Reg;
 
 procedure luaL_checkversion_(L: Plua_State; ver: lua_Number; sz: size_t); cdecl;
 procedure luaL_checkversion(L: Plua_State); inline;
@@ -513,15 +513,15 @@ function luaL_loadbuffer(L: Plua_State; const buff: PAnsiChar; size: size_t; con
 procedure luaL_pushfail(L: Plua_State); inline;
 
 const
-   LUA_COLIBNAME   = 'coroutine';
-   LUA_TABLIBNAME  = 'table';
-   LUA_IOLIBNAME   = 'io';
-   LUA_OSLIBNAME   = 'os';
-   LUA_STRLIBNAME  = 'string';
-   LUA_UTF8LIBNAME = 'utf8';
-   LUA_MATHLIBNAME = 'math';
-   LUA_DBLIBNAME   = 'debug';
-   LUA_LOADLIBNAME = 'package';
+  LUA_COLIBNAME   = 'coroutine';
+  LUA_TABLIBNAME  = 'table';
+  LUA_IOLIBNAME   = 'io';
+  LUA_OSLIBNAME   = 'os';
+  LUA_STRLIBNAME  = 'string';
+  LUA_UTF8LIBNAME = 'utf8';
+  LUA_MATHLIBNAME = 'math';
+  LUA_DBLIBNAME   = 'debug';
+  LUA_LOADLIBNAME = 'package';
 
 function luaopen_base(L: Plua_State): Integer; cdecl;
 function luaopen_coroutine(L: Plua_State): Integer; cdecl;
@@ -541,7 +541,7 @@ implementation
 
 function lua_upvalueindex(I: Integer): Integer;
 begin
-   Result := LUA_REGISTRYINDEX - i;
+  Result := LUA_REGISTRYINDEX - i;
 end;
 
 function lua_newstate(f: lua_Alloc; ud: Pointer): Plua_State; cdecl; external LUA_LIB_NAME;
@@ -558,19 +558,19 @@ procedure lua_rotate(L: Plua_State; idx, n: Integer); cdecl; external LUA_LIB_NA
 
 procedure lua_remove(L: Plua_State; idx: Integer);
 begin
-   lua_rotate(L, idx, -1);
-   lua_pop(L, 1);
+  lua_rotate(L, idx, -1);
+  lua_pop(L, 1);
 end;
 
 procedure lua_insert(L: Plua_State; idx: Integer);
 begin
-   lua_rotate(L, idx, 1);
+  lua_rotate(L, idx, 1);
 end;
 
 procedure lua_replace(L: Plua_State; idx: Integer);
 begin
-   lua_copy(L, -1, idx);
-   lua_pop(L, 1);
+  lua_copy(L, -1, idx);
+  lua_pop(L, 1);
 end;
 
 procedure lua_copy(L: Plua_State; fromidx, toidx: Integer); cdecl; external LUA_LIB_NAME;
@@ -603,7 +603,7 @@ procedure lua_pushstring(L: Plua_State; const s: PAnsiChar); cdecl; external LUA
 
 procedure lua_pushstring(L: Plua_State; const s: AnsiString);
 begin
-   lua_pushlstring(L, PAnsiChar(s), Length(s));
+  lua_pushlstring(L, PAnsiChar(s), Length(s));
 end;
 
 function lua_pushvfstring(L: Plua_State; const fmt: PAnsiChar; argp: Pointer): PAnsiChar; cdecl; external LUA_LIB_NAME;
@@ -673,24 +673,24 @@ procedure lua_toclose(L: Plua_State; idx: Integer); cdecl; external LUA_LIB_NAME
 
 function lua_getextraspace(L: Plua_State): Pointer;
 const
-  LUA_EXTRASPACE = sizeof(Pointer);
+  LUA_EXTRASPACE = SizeOf(Pointer);
 begin
-   Result := L - LUA_EXTRASPACE;
+  Result := L - LUA_EXTRASPACE;
 end;
 
 function lua_tonumber(L: Plua_State; idx: Integer): lua_Number;
 begin
-   Result := lua_tonumberx(L, idx, nil);
+  Result := lua_tonumberx(L, idx, nil);
 end;
 
 function lua_tointeger(L: Plua_State; idx: Integer): lua_Integer;
 begin
-   Result := lua_tointegerx(L, idx, nil);
+  Result := lua_tointegerx(L, idx, nil);
 end;
 
 procedure lua_pop(L: Plua_State; n: Integer);
 begin
-   lua_settop(L, - n - 1);
+  lua_settop(L, - n - 1);
 end;
 
 procedure lua_newtable(L: Plua_State);
@@ -700,8 +700,8 @@ end;
 
 procedure lua_register(L: Plua_State; const n: PAnsiChar; f: lua_CFunction);
 begin
-   lua_pushcfunction(L, f);
-   lua_setglobal(L, n);
+  lua_pushcfunction(L, f);
+  lua_setglobal(L, n);
 end;
 
 procedure lua_pushcfunction(L: Plua_State; f: lua_CFunction);
