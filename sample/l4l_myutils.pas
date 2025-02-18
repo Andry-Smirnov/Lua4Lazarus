@@ -28,12 +28,12 @@ type
     constructor Create(L : Plua_State); override;
     destructor Destroy; override;
   published
-    function l4l_Sleep: integer;
-    function l4l_ShowMessage: integer;
-    function l4l_Utf8ToWide: integer;
-    function l4l_WideToUtf8: integer;
-    function l4l_Utf8ToAnsi: integer;
-    function l4l_AnsiToUtf8: integer;
+    function l4l_Sleep: Integer;
+    function l4l_ShowMessage: Integer;
+    function l4l_Utf8ToWide: Integer;
+    function l4l_WideToUtf8: Integer;
+    function l4l_Utf8ToAnsi: Integer;
+    function l4l_AnsiToUtf8: Integer;
     property l4l_Now: string read GetNow;
   end;
 
@@ -53,19 +53,19 @@ begin
   inherited Destroy;
 end;
 
-function TLuaMyUtilsObject.l4l_Sleep: integer;
+function TLuaMyUtilsObject.l4l_Sleep: Integer;
 begin
   SysUtils.sleep(lua_tointeger(LS, 1));
   Result := 0;
 end;
 
-function TLuaMyUtilsObject.l4l_ShowMessage: integer;
+function TLuaMyUtilsObject.l4l_ShowMessage: Integer;
 begin
   Dialogs.ShowMessage(lua_tostring(LS, 1));
   Result := 0;
 end;
 
-function TLuaMyUtilsObject.l4l_Utf8ToWide: integer;
+function TLuaMyUtilsObject.l4l_Utf8ToWide: Integer;
 var
   ws: WideString;
 begin
@@ -74,9 +74,9 @@ begin
   Result := 1;
 end;
 
-function TLuaMyUtilsObject.l4l_WideToUtf8: integer;
+function TLuaMyUtilsObject.l4l_WideToUtf8: Integer;
 var
-  l: integer;
+  l: Integer;
   ws: WideString;
   p: PChar;
 begin
@@ -87,13 +87,13 @@ begin
   Result := 1;
 end;
 
-function TLuaMyUtilsObject.l4l_Utf8ToAnsi: integer;
+function TLuaMyUtilsObject.l4l_Utf8ToAnsi: Integer;
 begin
   lua_pushstring(LS, PChar(System.Utf8ToAnsi(lua_tostring(LS, 1))));
   Result := 1;
 end;
 
-function TLuaMyUtilsObject.l4l_AnsiToUtf8: integer;
+function TLuaMyUtilsObject.l4l_AnsiToUtf8: Integer;
 begin
   lua_pushstring(LS, PChar(System.AnsiToUtf8(lua_tostring(LS, 1))));
   Result := 1;

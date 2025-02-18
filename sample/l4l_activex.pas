@@ -55,7 +55,7 @@ type
     destructor Destroy; override;
     procedure AttachEvent(server: IDispatch);
     procedure DetachEvent;
-    function IsEventSupport: boolean;
+    function IsEventSupport: Boolean;
     { IDispatch }
     function GetTypeInfoCount(out Count: Integer): HRESULT; stdcall;
     function GetTypeInfo({%H-}Index, {%H-}LocaleID: Integer; out {%H-}TypeInfo): HRESULT; stdcall;
@@ -67,9 +67,9 @@ type
 
 function call(L : Plua_State) : Integer; cdecl; forward;
 function gc_ID(L : Plua_State) : Integer; cdecl; forward;
-procedure DoCreateActiveXObject(L : Plua_State; id: IDispatch); forward;
+procedure DoCreateActiveXObject(L: Plua_State; id: IDispatch); forward;
 
-procedure ChkErr(L : Plua_State; Val: HResult; const prop: string='');
+procedure ChkErr(L: Plua_State; Val: HResult; const prop: string = '');
 var
   s: string;
 begin
@@ -88,9 +88,9 @@ begin
   end;
 end;
 
-procedure Lua2Var(L : Plua_State; va: POleVariant; index: integer; toWideStr: boolean = True);
+procedure Lua2Var(L: Plua_State; va: POleVariant; index: Integer; toWideStr: Boolean = True);
 var
-  i, j: integer;
+  i, j: Integer;
   p: POleVariant;
   obj: TLuaObject;
   hp: TVarArrayBoundArray;
@@ -274,10 +274,10 @@ var
   di, diput: TDispID;
   param: TDispParams;
   v: OleVariant;
-  i: integer;
+  i: Integer;
   sink: ^TEventSink;
 begin
-  Result:=0;
+  Result := 0;
   lua_getmetatable(L, 1);
   lua_getfield(L, -1, FIELD_ID);
   p:= lua_touserdata(L, -1);
@@ -340,7 +340,7 @@ end;
 
 function call(L : Plua_State) : Integer; cdecl;
 var
-  i, c, t: integer;
+  i, c, t: Integer;
   p: POleVariant;
   id: IDispatch;
   di: TDispID;
@@ -459,7 +459,7 @@ end;
 
 function iterator(L : Plua_State) : Integer; cdecl;
 var
-  i: integer;
+  i: Integer;
   p: POleVariant;
   id: IDispatch;
   s: string;
@@ -553,7 +553,7 @@ begin
   sink^.Free;
 end;
 
-procedure DoCreateActiveXObject(L : Plua_State; id: IDispatch);
+procedure DoCreateActiveXObject(L: Plua_State; id: IDispatch);
 var
   p: POleVariant;
   sink: ^TEventSink;
@@ -621,7 +621,7 @@ end;
 function CreateRefType(L : Plua_State) : Integer; cdecl;
 var
   p: POleVariant;
-  ParamCount: integer;
+  ParamCount: Integer;
 begin
   ParamCount:= lua_gettop(L);
   lua_newtable(L);
@@ -766,7 +766,7 @@ var
   iid: TIID;
   ti: ITypeInfo;
   tl: ITypeLib;
-  i: integer;
+  i: Integer;
 begin
   if server.QueryInterface(IID_IConnectionPointContainer, cp_c) <> S_OK then
     Exit;
@@ -796,7 +796,7 @@ begin
   end;
 end;
 
-function TEventSink.IsEventSupport: boolean;
+function TEventSink.IsEventSupport: Boolean;
 begin
   Result:= Assigned(FCPoint);
 end;

@@ -43,7 +43,7 @@ uses
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  i: integer;
+  i: Integer;
 begin
   if Printer.Printers.Count <= 0 then begin
     Button1.Enabled := False;

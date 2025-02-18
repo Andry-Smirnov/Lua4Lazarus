@@ -44,9 +44,9 @@ type
     procedure ScrollBoxPaint(Sender: TObject);
   private
     { private declarations }
-    Zoom: integer;
+    Zoom: Integer;
     DragPoint: TPoint;
-    DragImage, MovePage: boolean;
+    DragImage, MovePage: Boolean;
     procedure DoSetZoomText({%H-}Data: PtrInt);
     procedure SetPageInfo;
   public
@@ -83,7 +83,7 @@ end;
 
 procedure TFormPreview.FormShow(Sender: TObject);
 var
-  i: integer;
+  i: Integer;
 begin
   i:= LP.PageCount;
   if i > 0 then begin
@@ -174,7 +174,7 @@ end;
 
 procedure TFormPreview.ComboZoomSelect(Sender: TObject);
 var
-  i, w, h, l, t, dpi, pw, ph: integer;
+  i, w, h, l, t, dpi, pw, ph: Integer;
   aspect: double;
   s: string;
 begin

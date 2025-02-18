@@ -42,18 +42,18 @@ type
 
   TLuaDbf = class(TLuaObject)
   private
-    function GetActive: boolean;
-    procedure SetActive(const AValue: boolean);
-    function GetEof: boolean;
+    function GetActive: Boolean;
+    procedure SetActive(const AValue: Boolean);
+    function GetEof: Boolean;
   protected
   public
     constructor Create(L : Plua_State); override;
     destructor Destroy; override;
   published
-    function l4l_Next: integer;
-    function l4l_FieldByName: integer;
-    property l4l_Active: boolean read GetActive write SetActive;
-    property l4l_eof: boolean read GetEof;
+    function l4l_Next: Integer;
+    function l4l_FieldByName: Integer;
+    property l4l_Active: Boolean read GetActive write SetActive;
+    property l4l_eof: Boolean read GetEof;
   end;
 
 function CreateDbfObject(L : Plua_State) : Integer; cdecl;
@@ -72,7 +72,7 @@ end;
 
 function print_func(L : Plua_State) : Integer; cdecl;
 var
-  i, c: integer;
+  i, c: Integer;
 begin
   c:= lua_gettop(L);
   for i:= 1 to c do
@@ -136,13 +136,13 @@ begin
   inherited Destroy;
 end;
 
-function TLuaDbf.l4l_Next: integer;
+function TLuaDbf.l4l_Next: Integer;
 begin
   Form1.Dbf1.Next;
   Result := 0;
 end;
 
-function TLuaDbf.l4l_FieldByName: integer;
+function TLuaDbf.l4l_FieldByName: Integer;
 var
   s: string;
   f: TField;
@@ -159,17 +159,17 @@ begin
   Result := 1;
 end;
 
-function TLuaDbf.GetActive: boolean;
+function TLuaDbf.GetActive: Boolean;
 begin
   Result:=Form1.Dbf1.Active;
 end;
 
-procedure TLuaDbf.SetActive(const AValue: boolean);
+procedure TLuaDbf.SetActive(const AValue: Boolean);
 begin
   Form1.Dbf1.Active:=AValue;
 end;
 
-function TLuaDbf.GetEof: boolean;
+function TLuaDbf.GetEof: Boolean;
 begin
   Result:=Form1.Dbf1.EOF;
 end;

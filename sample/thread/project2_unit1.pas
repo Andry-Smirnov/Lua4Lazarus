@@ -52,7 +52,7 @@ type
     L: Plua_State;
     msg: string;
     {$IF FPC_FULLVERSION < 30000}
-    finished: boolean;
+    finished: Boolean;
     {$ENDIF}
     procedure ShowMsg;
     procedure Last;
@@ -68,14 +68,14 @@ type
 
   TLuaMyObject = class(TLuaObject)
   private
-    function GetID: integer;
+    function GetID: Integer;
     procedure DoPrint;
   protected
   public
   published
     property l4l_ID: integer read GetID;
-    function l4l_print: integer;
-    function l4l_sleep: integer;
+    function l4l_print: Integer;
+    function l4l_sleep: Integer;
   end;
 
 function Alloc({%H-}ud, ptr: Pointer; {%H-}osize, nsize: size_t) : Pointer; cdecl;
@@ -104,7 +104,7 @@ procedure TForm1.Button1Click(Sender: TObject);
 var
   L: Plua_State;
   s: string;
-  i: integer;
+  i: Integer;
   t: TLuaThread;
   p: PLuaThread;
 begin
@@ -245,7 +245,7 @@ end;
 
 procedure TLuaMyObject.DoPrint;
 var
-  i, c: integer;
+  i, c: Integer;
   s: string;
 begin
   c:= lua_gettop(LS);
@@ -256,7 +256,7 @@ begin
   Form1.Memo2.SelLength:= 0;
 end;
 
-function TLuaMyObject.GetID: integer;
+function TLuaMyObject.GetID: Integer;
 var
   p: PLuaThread;
 begin
@@ -266,13 +266,13 @@ begin
   Result:= p^.ThreadID;
 end;
 
-function TLuaMyObject.l4l_print: integer;
+function TLuaMyObject.l4l_print: Integer;
 begin
   TThread.Synchronize(nil, @DoPrint);
   Result := 0;
 end;
 
-function TLuaMyObject.l4l_sleep: integer;
+function TLuaMyObject.l4l_sleep: Integer;
 begin
   Sleep(lua_tointeger(LS, 1));
   Result := 0;

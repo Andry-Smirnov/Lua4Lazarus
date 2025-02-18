@@ -22,8 +22,8 @@ interface
 uses
   Classes, SysUtils, l4l_print;
 
-procedure DrawPDF(stream: TStream; LPO: TLuaPrintObject; page: integer;
- x1, y1, x2, y2: integer);
+procedure DrawPDF(stream: TStream; LPO: TLuaPrintObject; page: Integer;
+ x1, y1, x2, y2: Integer);
 
 implementation
 uses
@@ -50,9 +50,9 @@ type
 
   TPDFObj = class
   public
-    no: integer;
+    no: Integer;
     val: string;
-    decoded: boolean;
+    decoded: Boolean;
     stream: string;
   end;
 
@@ -64,11 +64,11 @@ type
     objs: TStringList;
     buf: string;
     buf_p: PChar;
-    buf_l: integer;
+    buf_l: Integer;
     constructor Create(Astream: TStream);
     destructor Destroy; override;
     function FindObj(const no: string): TPDFObj;
-    function FindPageObj(no: integer): TPDFObj;
+    function FindPageObj(no: Integer): TPDFObj;
     procedure DecodeObj(obj: TPDFObj);
     procedure ReadBuf;
     function GetVal(const name, arr: string): string;
@@ -78,7 +78,7 @@ type
 
   TFontObj = class
   public
-    b: integer;
+    b: Integer;
     l: TStringList;
     font_name, font_file_no: string;
     constructor Create;
@@ -92,7 +92,7 @@ type
   public
     utf8: string;
     utf16: word;
-    width: integer;
+    width: Integer;
   end;
 
 { TDblXY }
@@ -102,9 +102,9 @@ begin
   tst := tstNone;
 end;
 
-function mempos(str1, str2: PChar; l: integer) : PChar;
+function mempos(str1, str2: PChar; l: Integer) : PChar;
 var
-  i, j, l2: integer;
+  i, j, l2: Integer;
 begin
   l2 := strlen(str2);
   for i := 0 to l-1 do begin
@@ -121,7 +121,7 @@ end;
 function TokenStr(var p: PChar): string;
 var
   c: char;
-  i: integer;
+  i: Integer;
 begin
   Result := '';
   while p^ in [#$09, #$0a, #$0c, #$0d, ' '] do Inc(p);
@@ -235,7 +235,7 @@ end;
 
 destructor TPDFReader.Destroy;
 var
-  i : integer;
+  i : Integer;
 begin
   for i := 0 to objs.Count - 1 do objs.Objects[i].Free;
   objs.Free;
@@ -244,7 +244,7 @@ end;
 
 function TPDFReader.FindObj(const no: string): TPDFObj;
 var
-  i, j, c: integer;
+  i, j, c: Integer;
   sp1, sp2: PChar;
   s, s1: string;
   o, o1: TPDFObj;
@@ -330,9 +330,9 @@ begin
   end;
 end;
 
-function TPDFReader.FindPageObj(no: integer): TPDFObj;
+function TPDFReader.FindPageObj(no: Integer): TPDFObj;
 var
-  i: integer;
+  i: Integer;
   sp1, sp2: PChar;
   s1: string;
   o: TPDFObj;
@@ -395,7 +395,7 @@ const
 var
   sp, sp1: PChar;
   s1, s2: string;
-  r, len, l: integer;
+  r, len, l: Integer;
   z: TZStream;
 begin
   obj.decoded:= True;
@@ -439,7 +439,7 @@ procedure TPDFReader.ReadBuf;
 const
   BUF_LEN = 100000;
 var
-  i, l: integer;
+  i, l: Integer;
   sp1, sp2: PChar;
 begin
   l := BUF_LEN;
@@ -472,7 +472,7 @@ function TPDFReader.GetVal(const name, arr: string): string;
 
   function GetValSub(sp: PChar): string;
   var
-    c: integer;
+    c: Integer;
     s: string;
     o: TPDFObj;
     sp1: PChar;
@@ -546,7 +546,7 @@ procedure TFontObj.make_l(const s: string);
 var
   p, p1: PChar;
   s1, s2, s3, s4: string;
-  i, c1, c2, c3: integer;
+  i, c1, c2, c3: Integer;
   cid: TCidObj;
 begin
   p := strpos(PChar(s), 'beginbfchar');
@@ -560,7 +560,7 @@ begin
     b := Length(s1) - 2;
     s2 := TokenStr(p);
     cid := TCidObj.Create;
-    cid.utf16:= StrToInt('$' + Copy(s2, 2, Length(s2)-2));
+    cid.utf16:= StrToInt('$' + Copy(s2, 2, Length(s2) - 2));
     cid.utf8:= UTF8Encode(WideString(WideChar(cid.utf16)));
     cid.width:= 0;
     l.AddObject(Copy(s1, 2, b), cid);
@@ -572,9 +572,9 @@ begin
   while True do begin
     s1 := TokenStr(p);
     if (s1 = '') or (s1 = 'endbfrange') then break;
-    c1 := StrToInt('$'+Copy(s1, 2, Length(s1)-2));
+    c1 := StrToInt('$'+Copy(s1, 2, Length(s1) - 2));
     s2 := TokenStr(p);
-    c2 := StrToInt('$'+Copy(s2, 2, Length(s2)-2));
+    c2 := StrToInt('$'+Copy(s2, 2, Length(s2) - 2));
     s3 := TokenStr(p);
     if (s3 <> '') and (s3[1] = '[') then begin
       i := 0;
@@ -582,14 +582,14 @@ begin
       while (p1^ <> ']') and (c1 + i <= c2) do begin
         s4 := TokenStr(p1);
         cid := TCidObj.Create;
-        cid.utf16:= StrToInt('$' + Copy(s4, 2, Length(s4)-2));
+        cid.utf16:= StrToInt('$' + Copy(s4, 2, Length(s4) - 2));
         cid.utf8:= UTF8Encode(WideString(WideChar(cid.utf16)));
         cid.width:= 0;
         l.AddObject(IntToHex(c1+i, b), cid);
         Inc(i);
       end;
     end else begin
-      c3 := StrToInt('$'+Copy(s3, 2, Length(s3)-2));
+      c3 := StrToInt('$'+Copy(s3, 2, Length(s3) - 2));
       i := 0;
       while c1 + i <= c2 do begin
         cid := TCidObj.Create;
@@ -606,7 +606,7 @@ end;
 procedure TFontObj.cid2utf8(const cid: string; objs: TObjectList);
 var
   s: string;
-  i, j: integer;
+  i, j: Integer;
 begin
   for i := 1 to Length(cid) div b do begin
     s := '';
@@ -621,7 +621,7 @@ end;
 procedure TFontObj.ascii_w(const ascii: string; objs: TObjectList);
 var
   s: string;
-  i, j: integer;
+  i, j: Integer;
 begin
   for i := 1 to Length(ascii) do begin
     s := IntToHex(Byte(ascii[i]), b);
@@ -631,15 +631,15 @@ begin
   end;
 end;
 
-procedure DrawPDF(stream: TStream; LPO: TLuaPrintObject; page: integer;
- x1, y1, x2, y2: integer);
+procedure DrawPDF(stream: TStream; LPO: TLuaPrintObject; page: Integer;
+ x1, y1, x2, y2: Integer);
 var
   PageW, PageH, RateW, RateH, Rate: double;
   fonts: TStringList;
 
   function matrixmul(m1, m2: TMatrix): TMatrix;
   var
-    i, j, k: integer;
+    i, j, k: Integer;
   begin
     for i:=1 to 3 do begin
       for j:=1 to 3 do begin
@@ -653,7 +653,7 @@ var
 
   function LStrObj2Str(const str:string): string;
   var
-    i, j: integer;
+    i, j: Integer;
   begin
     Result := '';
     i := 1;
@@ -688,14 +688,14 @@ var
   var
     ss: TStringList;
     params, texts: TObjectList;
-    i, j, l, Tf_index: integer;
+    i, j, l, Tf_index: Integer;
     s, s1, s2, cm, Tf: string;
     sx, sy, x1, y1, x2, y2: double;
     Tl, Tc, Tw, Tfs, Th, Trise: double;
     sp, sp1: PChar;
     xy: TDblXY;
     Tlm, Tm, m1, m2: TMatrix;
-    poly: boolean;
+    poly: Boolean;
   begin
     ss:= TStringList.Create;
     try
@@ -1194,7 +1194,7 @@ var
 var
   pdfr: TPDFReader;
   pageobj, pdfobj, pdfobj2: TPDFObj;
-  i, j, k: integer;
+  i, j, k: Integer;
   s, s1: string;
   sp1: PChar;
   sl: TStringList; // for debug

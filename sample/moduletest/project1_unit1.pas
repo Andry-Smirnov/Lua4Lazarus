@@ -48,7 +48,7 @@ end;
 
 function print_func(L : Plua_State) : Integer; cdecl;
 var
-  i, c: integer;
+  i, c: Integer;
 begin
   c:= lua_gettop(L);
   for i:= 1 to c do

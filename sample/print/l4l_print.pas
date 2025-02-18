@@ -27,7 +27,7 @@ type
   TLuaPrint = class(TObject)
   private
     FCanvasStack: TObjectList;
-    function GetPageCount: integer;
+    function GetPageCount: Integer;
     function GetPageSize: TSize;
     function GetPaperSize: TSize;
     procedure CopyCanvas(src, dst: TCanvas);
@@ -38,13 +38,13 @@ type
     FResList: TObjectList;
     FUserMargin, FRealMargin: TRect;
     FPaperRect: TPaperRect;
-    FDPI, FPlayDPI: integer;
+    FDPI, FPlayDPI: Integer;
     FCanvas: TCanvas;
     FOffset: TPoint;
-    FZoom: integer;
-    function DP2LP(dp: integer): integer;
-    function LP2DP(lp: integer): integer;
-    function z(i: integer): integer;
+    FZoom: Integer;
+    function DP2LP(dp: Integer): Integer;
+    function LP2DP(lp: Integer): Integer;
+    function z(i: Integer): Integer;
   public
     constructor Create(L : Plua_State);
     destructor Destroy; override;
@@ -53,10 +53,10 @@ type
     procedure Run(const SourceCode: string);
     procedure EndDoc;
     procedure NewPage;
-    procedure Play(pageNumber: integer; Cv: TCanvas;
+    procedure Play(pageNumber: Integer; Cv: TCanvas;
      dpi: integer = 0; Zoom: integer = 100);
-    procedure Play(pageNumber: integer; Cv: TCanvas; Margin: TRect;
-     dpi, Zoom: integer);
+    procedure Play(pageNumber: Integer; Cv: TCanvas; Margin: TRect;
+     dpi, Zoom: Integer);
     procedure Print(beginPage: integer=0; endPage: integer=0);
     property PageCount: integer read GetPageCount;
     property PaperSize: TSize read GetPaperSize;
@@ -79,31 +79,31 @@ type
     FUnits: char;
     function GetBrushObject: TLuaBrushObject;
     function GetFontObject: TLuaFontObject;
-    function GetPageHeight: integer;
-    function GetPageLeft: integer;
-    function GetPageNumber: integer;
-    function GetPageTop: integer;
-    function GetPageWidth: integer;
+    function GetPageHeight: Integer;
+    function GetPageLeft: Integer;
+    function GetPageNumber: Integer;
+    function GetPageTop: Integer;
+    function GetPageWidth: Integer;
     function GetPenObject: TLuaPenObject;
   protected
   public
     LuaPrint: TLuaPrint;
-    function DP2LP(dp: integer): integer;
-    function LP2DP(lp: integer): integer;
-    constructor Create(L : Plua_State; lp: TLuaPrint); overload;
+    function DP2LP(dp: Integer): Integer;
+    function LP2DP(lp: Integer): Integer;
+    constructor Create(L: Plua_State; lp: TLuaPrint); overload;
     destructor Destroy; override;
     procedure GetFontName(var FontName: string);
   published
-    function l4l_TextOut: integer;
-    function l4l_Rectangle: integer;
-    function l4l_Line: integer;
-    function l4l_TextWidth: integer;
-    function l4l_TextHeight: integer;
-    function l4l_DrawImage: integer;
-    function l4l_DrawPDF: integer;
-    function l4l_NewPage: integer;
-    function l4l_DP2LP: integer;
-    function l4l_LP2DP: integer;
+    function l4l_TextOut: Integer;
+    function l4l_Rectangle: Integer;
+    function l4l_Line: Integer;
+    function l4l_TextWidth: Integer;
+    function l4l_TextHeight: Integer;
+    function l4l_DrawImage: Integer;
+    function l4l_DrawPDF: Integer;
+    function l4l_NewPage: Integer;
+    function l4l_DP2LP: Integer;
+    function l4l_LP2DP: Integer;
     property l4l_pageWidth: integer read GetPageWidth;
     property l4l_pageHeight: integer read GetPageHeight;
     property l4l_pageNumber: integer read GetPageNumber;
@@ -120,21 +120,21 @@ type
   TLuaFontObject  = class(TLuaObject)
   private
     function GetColor: string;
-    function GetHeight: integer;
+    function GetHeight: Integer;
     function GetName: string;
-    function GetOrientation: integer;
-    function GetSize: integer;
+    function GetOrientation: Integer;
+    function GetSize: Integer;
     function GetStyle: string;
     procedure SetColor(const AValue: string);
-    procedure SetHeight(const AValue: integer);
+    procedure SetHeight(const AValue: Integer);
     procedure SetName(const AValue: string);
-    procedure SetOrientation(AValue: integer);
-    procedure SetSize(const AValue: integer);
+    procedure SetOrientation(AValue: Integer);
+    procedure SetSize(const AValue: Integer);
     procedure SetStyle(const AValue: string);
   protected
     LPO: TLuaPrintObject;
   public
-    constructor Create(L : Plua_State;  aLPO: TLuaPrintObject); overload;
+    constructor Create(L: Plua_State;  aLPO: TLuaPrintObject); overload;
     destructor Destroy; override;
   published
     property l4l_color: string read GetColor write SetColor;
@@ -152,15 +152,15 @@ type
     function GetColor: string;
     function GetMode: string;
     function GetStyle: string;
-    function GetWidth: integer;
+    function GetWidth: Integer;
     procedure SetColor(const AValue: string);
     procedure SetMode(const AValue: string);
     procedure SetStyle(const AValue: string);
-    procedure SetWidth(const AValue: integer);
+    procedure SetWidth(const AValue: Integer);
   protected
     LPO: TLuaPrintObject;
   public
-    constructor Create(L : Plua_State; aLPO: TLuaPrintObject); overload;
+    constructor Create(L: Plua_State; aLPO: TLuaPrintObject); overload;
     destructor Destroy; override;
   published
     property l4l_color: string read GetColor write SetColor;
@@ -180,7 +180,7 @@ type
   protected
     LPO: TLuaPrintObject;
   public
-    constructor Create(L : Plua_State; aLPO: TLuaPrintObject); overload;
+    constructor Create(L: Plua_State; aLPO: TLuaPrintObject); overload;
     destructor Destroy; override;
   published
     property l4l_color: string read GetColor write SetColor;
@@ -214,58 +214,58 @@ type
   private
 {$IFDEF USE_AGG}
     AggLCLCanvas: TMyAggCanvas;
-    rx1, ry1, rx2, ry2: integer;
-    procedure poly_sub(flag: TAggDrawPathFlag; w: boolean);
+    rx1, ry1, rx2, ry2: Integer;
+    procedure poly_sub(flag: TAggDrawPathFlag; w: Boolean);
 {$ELSE}
     PPP: array of TPoint;
     PPC: array of integer;
 {$ENDIF}
   protected
     LuaPrint: TLuaPrint;
-    function w(i: integer): integer;
-    function zx(i: integer): integer;
-    function zy(i: integer): integer;
+    function w(i: Integer): Integer;
+    function zx(i: Integer): Integer;
+    function zy(i: Integer): Integer;
   public
-    constructor Create(L : Plua_State; lp: TLuaPrint); overload;
+    constructor Create(L: Plua_State; lp: TLuaPrint); overload;
     destructor Destroy; override;
   published
-    function l4l_TextOut: integer;
-    function l4l_Rectangle: integer;
-    function l4l_fillrect: integer;
-    function l4l_Line: integer;
-    function l4l_AddPolyPoint: integer;
-    function l4l_AddBezierPoint: integer;
-    function l4l_Polygon: integer;
-    function l4l_Polyfill: integer;
-    function l4l_Polyline: integer;
-    function l4l_DrawImage: integer;
-    function l4l_font_color: integer;
-    function l4l_font_name: integer;
-    function l4l_font_size: integer;
-    function l4l_font_height: integer;
-    function l4l_font_style: integer;
-    function l4l_font_orientation: integer;
-    function l4l_pen_color: integer;
-    function l4l_pen_style: integer;
-    function l4l_pen_joinstyle: integer;
-    function l4l_pen_endcap: integer;
-    function l4l_pen_mode: integer;
-    function l4l_pen_width: integer;
-    function l4l_brush_color: integer;
-    function l4l_brush_style: integer;
-    function l4l_PushCanvas: integer;
-    function l4l_PopCanvas: integer;
-    function l4l_SetClipRect: integer;
+    function l4l_TextOut: Integer;
+    function l4l_Rectangle: Integer;
+    function l4l_fillrect: Integer;
+    function l4l_Line: Integer;
+    function l4l_AddPolyPoint: Integer;
+    function l4l_AddBezierPoint: Integer;
+    function l4l_Polygon: Integer;
+    function l4l_Polyfill: Integer;
+    function l4l_Polyline: Integer;
+    function l4l_DrawImage: Integer;
+    function l4l_font_color: Integer;
+    function l4l_font_name: Integer;
+    function l4l_font_size: Integer;
+    function l4l_font_height: Integer;
+    function l4l_font_style: Integer;
+    function l4l_font_orientation: Integer;
+    function l4l_pen_color: Integer;
+    function l4l_pen_style: Integer;
+    function l4l_pen_joinstyle: Integer;
+    function l4l_pen_endcap: Integer;
+    function l4l_pen_mode: Integer;
+    function l4l_pen_width: Integer;
+    function l4l_brush_color: Integer;
+    function l4l_brush_style: Integer;
+    function l4l_PushCanvas: Integer;
+    function l4l_PopCanvas: Integer;
+    function l4l_SetClipRect: Integer;
   end;
 
 { TLuaPrint }
 
-function TLuaPrint.GetPageCount: integer;
+function TLuaPrint.GetPageCount: Integer;
 begin
   Result := FPageList.Count;
 end;
 
-function TLuaPrint.DP2LP(dp: integer): integer;
+function TLuaPrint.DP2LP(dp: Integer): Integer;
 begin
   Result:= Trunc(MM_P_INCH * dp / FDPI + 0.5);
 end;
@@ -307,12 +307,12 @@ begin
   FCanvasStack.Delete(FCanvasStack.Count - 1);
 end;
 
-function TLuaPrint.LP2DP(lp: integer): integer;
+function TLuaPrint.LP2DP(lp: Integer): Integer;
 begin
   Result:= Trunc(lp * FDPI / MM_P_INCH + 0.5);
 end;
 
-function TLuaPrint.z(i: integer): integer;
+function TLuaPrint.z(i: Integer): Integer;
 begin
   Result := i*FPlayDpi*FZoom div (FDPI*100);
 end;
@@ -414,18 +414,18 @@ begin
     Raise Exception.Create('');
 end;
 
-procedure TLuaPrint.Play(pageNumber: integer; Cv: TCanvas; dpi: integer;
-  Zoom: integer);
+procedure TLuaPrint.Play(pageNumber: Integer; Cv: TCanvas; dpi: Integer;
+  Zoom: Integer);
 begin
   Play(pageNumber, Cv, types.Rect(0, 0, 0, 0), dpi, Zoom);
 end;
 
-procedure TLuaPrint.Play(pageNumber: integer; Cv: TCanvas; Margin: TRect;
-  dpi, Zoom: integer);
+procedure TLuaPrint.Play(pageNumber: Integer; Cv: TCanvas; Margin: TRect;
+  dpi, Zoom: Integer);
 var
-  i : integer;
+  i : Integer;
   sl: TStringList;
-  x, y: integer;
+  x, y: Integer;
   bmp: graphics.TBitmap;
 begin
   if (pageNumber > 0) and (pageNumber <= PageCount) then begin
@@ -451,7 +451,7 @@ begin
     FCanvas.Font.Height := FCanvas.Font.Height * FZoom div 100;
     FCanvas.Pen.Width:= FCanvas.Pen.Width * FPlayDpi * FZoom div (FDPI * 100);
 
-    FCanvas.ClipRect := types.Rect(0, 0, z(x)+1, z(y)+1);
+    FCanvas.ClipRect := types.Rect(0, 0, z(x) + 1, z(y) + 1);
     FCanvas.Clipping:= True;
     try
       sl := TStringList(FPageList[pageNumber-1]);
@@ -472,9 +472,9 @@ begin
   end;
 end;
 
-procedure TLuaPrint.Print(beginPage: integer; endPage: integer);
+procedure TLuaPrint.Print(beginPage: Integer; endPage: Integer);
 var
-  i: integer;
+  i: Integer;
   m: TRect;
 begin
   if beginPage < 1 then beginPage := 1;
@@ -501,7 +501,7 @@ end;
 
 function str_param(const s: string): string;
 var
-  i: integer;
+  i: Integer;
 begin
   Result := '"';
   for i:= 1 to Length(s) do begin
@@ -518,9 +518,9 @@ end;
 
 { TLuaPrintObject }
 
-function TLuaPrintObject.DP2LP(dp: integer): integer;
+function TLuaPrintObject.DP2LP(dp: Integer): Integer;
 var
-  i : integer;
+  i : Integer;
 begin
   case Upcase(FUnits) of
     'M': i:= MM_P_INCH;
@@ -549,34 +549,34 @@ begin
   Result := TLuaPenObject.Create(LS, Self);
 end;
 
-function TLuaPrintObject.GetPageHeight: integer;
+function TLuaPrintObject.GetPageHeight: Integer;
 begin
   Result := DP2LP(LuaPrint.PageSize.cy);
 end;
 
-function TLuaPrintObject.GetPageLeft: integer;
+function TLuaPrintObject.GetPageLeft: Integer;
 begin
   Result := DP2LP(LuaPrint.FRealMargin.Left);
 end;
 
-function TLuaPrintObject.GetPageTop: integer;
+function TLuaPrintObject.GetPageTop: Integer;
 begin
   Result := DP2LP(LuaPrint.FRealMargin.Top);
 end;
 
-function TLuaPrintObject.GetPageNumber: integer;
+function TLuaPrintObject.GetPageNumber: Integer;
 begin
   Result := LuaPrint.PageCount;
 end;
 
-function TLuaPrintObject.GetPageWidth: integer;
+function TLuaPrintObject.GetPageWidth: Integer;
 begin
   Result := DP2LP(LuaPrint.PageSize.cx);
 end;
 
-function TLuaPrintObject.LP2DP(lp: integer): integer;
+function TLuaPrintObject.LP2DP(lp: Integer): Integer;
 var
-  i : integer;
+  i : Integer;
 begin
   case Upcase(FUnits) of
     'M': i:= MM_P_INCH;
@@ -607,7 +607,7 @@ begin
   inherited Destroy;
 end;
 
-function TLuaPrintObject.l4l_TextOut: integer;
+function TLuaPrintObject.l4l_TextOut: Integer;
 begin
   LuaPrint.AddOrder(
    Format(PRUN_NAME + '.TextOut(%d,%d,%s)',
@@ -616,7 +616,7 @@ begin
   Result := 0;
 end;
 
-function TLuaPrintObject.l4l_Rectangle: integer;
+function TLuaPrintObject.l4l_Rectangle: Integer;
 begin
   LuaPrint.AddOrder(
    Format(PRUN_NAME + '.rectangle(%d,%d,%d,%d)',
@@ -625,9 +625,9 @@ begin
   Result := 0;
 end;
 
-function TLuaPrintObject.l4l_Line: integer;
+function TLuaPrintObject.l4l_Line: Integer;
 var
-  c: integer;
+  c: Integer;
 begin
   c := lua_gettop(LS);
   if c < 4 then begin
@@ -643,19 +643,19 @@ begin
   Result := 0;
 end;
 
-function TLuaPrintObject.l4l_TextWidth: integer;
+function TLuaPrintObject.l4l_TextWidth: Integer;
 begin
   lua_pushinteger(LS, DP2LP(LuaPrint.FCanvas.TextWidth(lua_tostring(LS, 1))));
   Result := 1;
 end;
 
-function TLuaPrintObject.l4l_TextHeight: integer;
+function TLuaPrintObject.l4l_TextHeight: Integer;
 begin
   lua_pushinteger(LS, DP2LP(LuaPrint.FCanvas.TextHeight(lua_tostring(LS, 1))));
   Result := 1;
 end;
 
-function TLuaPrintObject.l4l_DrawImage: integer;
+function TLuaPrintObject.l4l_DrawImage: Integer;
 var
   fn: string;
   ms: TMemoryStream;
@@ -676,7 +676,7 @@ begin
   Result := 0;
 end;
 
-function TLuaPrintObject.l4l_DrawPDF: integer;
+function TLuaPrintObject.l4l_DrawPDF: Integer;
 var
   fn: string;
   fs: TFileStream;
@@ -706,19 +706,19 @@ begin
   Result := 0;
 end;
 
-function TLuaPrintObject.l4l_NewPage: integer;
+function TLuaPrintObject.l4l_NewPage: Integer;
 begin
   LuaPrint.NewPage;
   Result := 0;
 end;
 
-function TLuaPrintObject.l4l_DP2LP: integer;
+function TLuaPrintObject.l4l_DP2LP: Integer;
 begin
   lua_pushinteger(LS, DP2LP(lua_tointeger(LS, 1)));
   Result := 1;
 end;
 
-function TLuaPrintObject.l4l_LP2DP: integer;
+function TLuaPrintObject.l4l_LP2DP: Integer;
 begin
   lua_pushinteger(LS, LP2DP(lua_tointeger(LS, 1)));
   Result := 1;
@@ -742,7 +742,7 @@ begin
   Result := ColorToString(LPO.LuaPrint.FCanvas.Font.Color);
 end;
 
-function TLuaFontObject.GetHeight: integer;
+function TLuaFontObject.GetHeight: Integer;
 begin
   Result := LPO.LuaPrint.FCanvas.Font.Height;
 end;
@@ -752,12 +752,12 @@ begin
   Result := LPO.LuaPrint.FCanvas.Font.Name;
 end;
 
-function TLuaFontObject.GetOrientation: integer;
+function TLuaFontObject.GetOrientation: Integer;
 begin
   Result := LPO.LuaPrint.FCanvas.Font.Orientation;
 end;
 
-function TLuaFontObject.GetSize: integer;
+function TLuaFontObject.GetSize: Integer;
 begin
   Result := LPO.LuaPrint.FCanvas.Font.Size;
 end;
@@ -770,7 +770,7 @@ end;
 
 procedure TLuaFontObject.SetColor(const AValue: string);
 var
-  i: integer;
+  i: Integer;
 begin
   try
     i := StrToInt(AValue);
@@ -784,7 +784,7 @@ begin
   end;
 end;
 
-procedure TLuaFontObject.SetHeight(const AValue: integer);
+procedure TLuaFontObject.SetHeight(const AValue: Integer);
 begin
   LPO.LuaPrint.FCanvas.Font.Height := AValue;
   LPO.LuaPrint.AddOrder(
@@ -798,14 +798,14 @@ begin
    Format(PRUN_NAME + '.font_name(%s)', [str_param(AValue)]));
 end;
 
-procedure TLuaFontObject.SetOrientation(AValue: integer);
+procedure TLuaFontObject.SetOrientation(AValue: Integer);
 begin
   LPO.LuaPrint.FCanvas.Font.Orientation := AValue;
   LPO.LuaPrint.AddOrder(
    Format(PRUN_NAME + '.font_orientation(%d)', [AValue]));
 end;
 
-procedure TLuaFontObject.SetSize(const AValue: integer);
+procedure TLuaFontObject.SetSize(const AValue: Integer);
 begin
   LPO.LuaPrint.FCanvas.Font.Size := AValue;
   LPO.LuaPrint.AddOrder(
@@ -814,7 +814,7 @@ end;
 
 procedure TLuaFontObject.SetStyle(const AValue: string);
 var
-  i: integer;
+  i: Integer;
 begin
   try
     i := StrToInt(AValue);
@@ -834,7 +834,7 @@ begin
    Integer(LPO.LuaPrint.FCanvas.Pen.Style));
 end;
 
-function TLuaPenObject.GetWidth: integer;
+function TLuaPenObject.GetWidth: Integer;
 begin
   Result := LPO.DP2LP(LPO.LuaPrint.FCanvas.Pen.Width);
   if Result < 1 then Result := 1;
@@ -853,7 +853,7 @@ end;
 
 procedure TLuaPenObject.SetColor(const AValue: string);
 var
-  i: integer;
+  i: Integer;
 begin
   try
     i := StrToInt(AValue);
@@ -869,7 +869,7 @@ end;
 
 procedure TLuaPenObject.SetMode(const AValue: string);
 var
-  i: integer;
+  i: Integer;
 begin
   try
     i := StrToInt(AValue);
@@ -885,7 +885,7 @@ end;
 
 procedure TLuaPenObject.SetStyle(const AValue: string);
 var
-  i: integer;
+  i: Integer;
 begin
   try
     i := StrToInt(AValue);
@@ -899,9 +899,9 @@ begin
   end;
 end;
 
-procedure TLuaPenObject.SetWidth(const AValue: integer);
+procedure TLuaPenObject.SetWidth(const AValue: Integer);
 var
-  i: integer;
+  i: Integer;
 begin
   i:= LPO.LP2DP(AValue);
   if i < 1 then i := 1;
@@ -935,7 +935,7 @@ end;
 
 procedure TLuaBrushObject.SetColor(const AValue: string);
 var
-  i: integer;
+  i: Integer;
 begin
   try
     i := StrToInt(AValue);
@@ -951,7 +951,7 @@ end;
 
 procedure TLuaBrushObject.SetStyle(const AValue: string);
 var
-  i: integer;
+  i: Integer;
 begin
   try
     i := StrToInt(AValue);
@@ -978,18 +978,18 @@ end;
 
 { TLuaPrintRunObject }
 
-function TLuaPrintRunObject.w(i: integer): integer;
+function TLuaPrintRunObject.w(i: Integer): Integer;
 begin
   Result := i * LuaPrint.FPlayDpi * LuaPrint.FZoom div (LuaPrint.FDPI * 100);
 end;
 
-function TLuaPrintRunObject.zx(i: integer): integer;
+function TLuaPrintRunObject.zx(i: Integer): Integer;
 begin
   Result := (i + LuaPrint.FOffset.x) *
    LuaPrint.FPlayDpi * LuaPrint.FZoom div (LuaPrint.FDPI * 100);
 end;
 
-function TLuaPrintRunObject.zy(i: integer): integer;
+function TLuaPrintRunObject.zy(i: Integer): Integer;
 begin
   Result := (i + LuaPrint.FOffset.y) *
    LuaPrint.FPlayDpi * LuaPrint.FZoom div (LuaPrint.FDPI * 100);
@@ -1015,16 +1015,16 @@ begin
   inherited Destroy;
 end;
 
-function TLuaPrintRunObject.l4l_TextOut: integer;
+function TLuaPrintRunObject.l4l_TextOut: Integer;
 begin
   LuaPrint.FCanvas.TextOut(
    zx(lua_tointeger(LS, 1)), zy(lua_tointeger(LS, 2)), lua_tostring(LS, 3));
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_Rectangle: integer;
+function TLuaPrintRunObject.l4l_Rectangle: Integer;
 var
-  x1, y1, x2, y2: integer;
+  x1, y1, x2, y2: Integer;
 begin
   x1:= zx(lua_tointeger(LS, 1));
   y1:= zy(lua_tointeger(LS, 2));
@@ -1040,7 +1040,7 @@ begin
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_fillrect: integer;
+function TLuaPrintRunObject.l4l_fillrect: Integer;
 begin
   LuaPrint.FCanvas.FillRect(
    zx(lua_tointeger(LS, 1)), zy(lua_tointeger(LS, 2)),
@@ -1048,9 +1048,9 @@ begin
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_Line: integer;
+function TLuaPrintRunObject.l4l_Line: Integer;
 var
-  c: integer;
+  c: Integer;
 begin
   c := lua_gettop(LS);
   if c < 4 then begin
@@ -1064,7 +1064,7 @@ begin
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_AddPolyPoint: integer;
+function TLuaPrintRunObject.l4l_AddPolyPoint: Integer;
 var
   i,
 {$IFDEF USE_AGG}
@@ -1072,7 +1072,7 @@ var
 {$ELSE}
   l,
 {$ENDIF}
-  c: integer;
+  c: Integer;
 begin
   c := lua_gettop(LS);
   if c > 0 then begin
@@ -1099,7 +1099,7 @@ begin
     for i := 1 to c div 2 do begin
       PPP[l+i-1] := types.Point(zx(lua_tointeger(LS, i*2-1)), zy(lua_tointeger(LS, i*2)));
     end;
-    SetLength(PPC, Length(PPC)+1);
+    SetLength(PPC, Length(PPC) + 1);
     PPC[Length(PPC) - 1] := c div 2;
 {$ENDIF}
   end else begin
@@ -1113,14 +1113,14 @@ begin
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_AddBezierPoint: integer;
+function TLuaPrintRunObject.l4l_AddBezierPoint: Integer;
 var
   i,
 {$IFDEF USE_AGG}
 {$ELSE}
   l,
 {$ENDIF}
-  c: integer;
+  c: Integer;
   p: array of TPoint;
   pp: PPoint;
 begin
@@ -1150,7 +1150,7 @@ begin
       l := Length(PPP);
       SetLength(PPP, l + c);
       for i := 1 to c do PPP[l+i-1] := (pp+i-1)^;
-      SetLength(PPC, Length(PPC)+1);
+      SetLength(PPC, Length(PPC) + 1);
       PPC[Length(PPC) - 1] := c;
 {$ENDIF}
     finally
@@ -1168,11 +1168,11 @@ begin
 end;
 
 {$IFDEF USE_AGG}
-procedure TLuaPrintRunObject.poly_sub(flag: TAggDrawPathFlag; w: boolean);
+procedure TLuaPrintRunObject.poly_sub(flag: TAggDrawPathFlag; w: Boolean);
 var
-  i: integer;
+  i: Integer;
   bmp: graphics.TBitmap;
-  lw : integer;
+  lw : Integer;
   x, y: double;
 begin
   bmp := graphics.TBitmap.Create;
@@ -1195,7 +1195,7 @@ begin
     AggLCLCanvas.Image.SetSize(rx2-rx1+1+lw*2, ry2-ry1+1+lw*2);
     AggLCLCanvas.Erase;
     for i := 0 to AggLCLCanvas.Path.m_path.total_vertices-1 do begin
-      AggLCLCanvas.Path.m_path.vertex_(i, @x ,@y);
+      AggLCLCanvas.Path.m_path.vertex_(i, @x , @y);
       AggLCLCanvas.Path.m_path.modify_vertex(i, x-rx1+lw, y-ry1+lw);
     end;
     AggLCLCanvas.AggDrawPath(flag);
@@ -1208,11 +1208,11 @@ begin
 end;
 {$ENDIF}
 
-function TLuaPrintRunObject.l4l_Polygon: integer;
+function TLuaPrintRunObject.l4l_Polygon: Integer;
 {$IFDEF USE_AGG}
 {$ELSE}
 var
-  i: integer;
+  i: Integer;
 {$ENDIF}
 begin
 {$IFDEF USE_AGG}
@@ -1231,11 +1231,11 @@ begin
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_Polyfill: integer;
+function TLuaPrintRunObject.l4l_Polyfill: Integer;
 {$IFDEF USE_AGG}
 {$ELSE}
 var
-  i: integer;
+  i: Integer;
   ps: TPenStyle;
 {$ENDIF}
 begin
@@ -1258,7 +1258,7 @@ begin
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_Polyline: integer;
+function TLuaPrintRunObject.l4l_Polyline: Integer;
 begin
 {$IFDEF USE_AGG}
   poly_sub(AGG_StrokeOnly, False);
@@ -1273,11 +1273,11 @@ begin
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_DrawImage: integer;
+function TLuaPrintRunObject.l4l_DrawImage: Integer;
 var
   ms: TStream;
   g: TPicture;
-  x1, y1, x2, y2, i: integer;
+  x1, y1, x2, y2, i: Integer;
   n: lua_number;
 begin
   g := TPicture.Create;
@@ -1307,19 +1307,19 @@ begin
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_font_color: integer;
+function TLuaPrintRunObject.l4l_font_color: Integer;
 begin
   LuaPrint.FCanvas.Font.Color := TColor(lua_tointeger(LS, 1));
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_font_name: integer;
+function TLuaPrintRunObject.l4l_font_name: Integer;
 begin
   LuaPrint.FCanvas.Font.Name := lua_tostring(LS, 1);
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_font_size: integer;
+function TLuaPrintRunObject.l4l_font_size: Integer;
 begin
   LuaPrint.FCanvas.Font.Size := lua_tointeger(LS, 1);
   LuaPrint.FCanvas.Font.Height:=
@@ -1327,85 +1327,85 @@ begin
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_font_height: integer;
+function TLuaPrintRunObject.l4l_font_height: Integer;
 begin
   LuaPrint.FCanvas.Font.Height := w(lua_tointeger(LS, 1));
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_font_style: integer;
+function TLuaPrintRunObject.l4l_font_style: Integer;
 begin
   LuaPrint.FCanvas.Font.Style := TFontStyles(Integer(lua_tointeger(LS, 1)));
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_font_orientation: integer;
+function TLuaPrintRunObject.l4l_font_orientation: Integer;
 begin
   LuaPrint.FCanvas.Font.Orientation := lua_tointeger(LS, 1);
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_pen_color: integer;
+function TLuaPrintRunObject.l4l_pen_color: Integer;
 begin
   LuaPrint.FCanvas.Pen.Color := TColor(lua_tointeger(LS, 1));
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_pen_style: integer;
+function TLuaPrintRunObject.l4l_pen_style: Integer;
 begin
   LuaPrint.FCanvas.Pen.Style := TPenStyle(lua_tointeger(LS, 1));
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_pen_joinstyle: integer;
+function TLuaPrintRunObject.l4l_pen_joinstyle: Integer;
 begin
   LuaPrint.FCanvas.Pen.JoinStyle := TPenJoinStyle(lua_tointeger(LS, 1));
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_pen_endcap: integer;
+function TLuaPrintRunObject.l4l_pen_endcap: Integer;
 begin
   LuaPrint.FCanvas.Pen.EndCap := TPenEndCap(lua_tointeger(LS, 1));
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_pen_mode: integer;
+function TLuaPrintRunObject.l4l_pen_mode: Integer;
 begin
   LuaPrint.FCanvas.Pen.Mode := TPenMode(lua_tointeger(LS, 1));
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_pen_width: integer;
+function TLuaPrintRunObject.l4l_pen_width: Integer;
 begin
   LuaPrint.FCanvas.Pen.Width:= w(lua_tointeger(LS, 1));
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_brush_color: integer;
+function TLuaPrintRunObject.l4l_brush_color: Integer;
 begin
   LuaPrint.FCanvas.Brush.Color := TColor(lua_tointeger(LS, 1));
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_brush_style: integer;
+function TLuaPrintRunObject.l4l_brush_style: Integer;
 begin
   LuaPrint.FCanvas.Brush.Style := TBrushStyle(lua_tointeger(LS, 1));
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_PushCanvas: integer;
+function TLuaPrintRunObject.l4l_PushCanvas: Integer;
 begin
   LuaPrint.PushCanvas;
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_PopCanvas: integer;
+function TLuaPrintRunObject.l4l_PopCanvas: Integer;
 begin
   LuaPrint.PopCanvas;
   Result := 0;
 end;
 
-function TLuaPrintRunObject.l4l_SetClipRect: integer;
+function TLuaPrintRunObject.l4l_SetClipRect: Integer;
 begin
   LuaPrint.FCanvas.Region.ClipRect :=
    types.Rect(lua_tointeger(LS, 1), lua_tointeger(LS, 2),

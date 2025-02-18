@@ -45,7 +45,7 @@ type
     FLS: Plua_State;
   protected
     property LS: Plua_State read FLS;
-    function Iterator({%H-}index: integer): integer; virtual;
+    function Iterator({%H-}index: Integer): Integer; virtual;
   public
     constructor Create(L : Plua_State); virtual;
   published
@@ -53,9 +53,9 @@ type
 
 procedure l4l_SetLuaObject(obj: TLuaObject);
 procedure l4l_PushLuaObject(obj: TLuaObject);
-function l4l_isobject(L : Plua_State;  n: Integer): boolean;
-function l4l_isobject(L : Plua_State;  n: Integer; c: TClass): boolean;
-function l4l_toobject(L : Plua_State;  n: Integer): TLuaObject;
+function l4l_isobject(L: Plua_State;  n: Integer): Boolean;
+function l4l_isobject(L: Plua_State;  n: Integer; c: TClass): Boolean;
+function l4l_toobject(L: Plua_State;  n: Integer): TLuaObject;
 
 implementation
 uses
@@ -159,7 +159,7 @@ var
   obj: TLuaObject;
   pi: PPropInfo;
 begin
-  Result:=0;
+  Result := 0;
   lua_getfield(L, 1, FIELD_OBJ);
   p:= lua_touserdata(L, -1);
   obj:= TLuaObject(p^);
@@ -194,7 +194,7 @@ end;
 
 function iterator(L : Plua_State) : Integer; cdecl;
 var
-  i: integer;
+  i: Integer;
   p: PPointer;
   obj: TLuaObject;
 begin
@@ -232,7 +232,7 @@ type
   PMethodTable =  ^TMethodTable;
 var
   p: PPointer;
-  i, t: integer;
+  i, t: Integer;
   mt: PMethodTable;
   s:string;
   cl: TClass;
@@ -296,12 +296,12 @@ begin
   l4l_SetLuaObject(obj);
 end;
 
-function l4l_isobject(L : Plua_State;  n: Integer): boolean;
+function l4l_isobject(L: Plua_State;  n: Integer): Boolean;
 begin
   Result:= l4l_isobject(L, n, TLuaObject);
 end;
 
-function l4l_isobject(L : Plua_State;  n: Integer; c: TClass): boolean;
+function l4l_isobject(L: Plua_State;  n: Integer; c: TClass): Boolean;
 var
   p: PPointer;
 begin
@@ -333,7 +333,7 @@ end;
 
 { TLuaObject }
 
-function TLuaObject.Iterator(index: integer): integer;
+function TLuaObject.Iterator(index: Integer): Integer;
 begin
   Result := 0;
 end;

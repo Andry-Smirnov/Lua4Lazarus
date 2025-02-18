@@ -45,7 +45,7 @@ type
     L: Plua_State;
     msg: string;
     {$IF FPC_FULLVERSION < 30000}
-    finished: boolean;
+    finished: Boolean;
     {$ENDIF}
     procedure ShowMsg;
     procedure Last;
@@ -66,8 +66,8 @@ type
   protected
   public
   published
-    function l4l_print: integer;
-    function l4l_SetCaption: integer;
+    function l4l_print: Integer;
+    function l4l_SetCaption: Integer;
   end;
 
 function Alloc({%H-}ud, ptr: Pointer; {%H-}osize, nsize: size_t) : Pointer; cdecl;
@@ -193,7 +193,7 @@ end;
 
 procedure TLuaMyObject.DoPrint;
 var
-  i, c: integer;
+  i, c: Integer;
 begin
   c:= lua_gettop(LS);
   for i:= 1 to c do
@@ -207,13 +207,13 @@ begin
   Form1.Label1.Caption:= lua_tostring(LS, 1);
 end;
 
-function TLuaMyObject.l4l_print: integer;
+function TLuaMyObject.l4l_print: Integer;
 begin
   TThread.Synchronize(nil, @DoPrint);
   Result := 0;
 end;
 
-function TLuaMyObject.l4l_SetCaption: integer;
+function TLuaMyObject.l4l_SetCaption: Integer;
 begin
   TThread.Synchronize(nil, @DoSetCaption);
   Result := 0;
