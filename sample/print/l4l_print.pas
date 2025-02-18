@@ -448,7 +448,7 @@ begin
     FCanvas.Font.PixelsPerInch:= FPlayDpi;
     FCanvas.Font.Size:= i + 1;
     FCanvas.Font.Size:= i;
-    FCanvas.Font.Height:= FCanvas.Font.Height * FZoom div 100;
+    FCanvas.Font.Height := FCanvas.Font.Height * FZoom div 100;
     FCanvas.Pen.Width:= FCanvas.Pen.Width * FPlayDpi * FZoom div (FDPI * 100);
 
     FCanvas.ClipRect := types.Rect(0, 0, z(x)+1, z(y)+1);

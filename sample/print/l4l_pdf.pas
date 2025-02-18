@@ -1068,7 +1068,7 @@ var
                [-Trunc(m2[2][2]*Rate)]));
               LPO.LuaPrint.AddOrder(Format(PRUN_NAME + '.brush_style(%d)',
                [Integer(bsClear)]));
-              LPO.LuaPrint.Canvas.Font.Height:= -Trunc(m2[2][2]);
+              LPO.LuaPrint.Canvas.Font.Height := -Trunc(m2[2][2]);
 
               if s = '' then begin
                 l := texts.Count;
@@ -1143,7 +1143,7 @@ var
                [-Trunc(m2[2][2]*Rate)]));
               LPO.LuaPrint.AddOrder(Format(PRUN_NAME + '.brush_style(%d)',
                [Integer(bsClear)]));
-              LPO.LuaPrint.Canvas.Font.Height:= -Trunc(m2[2][2]);
+              LPO.LuaPrint.Canvas.Font.Height := -Trunc(m2[2][2]);
               if s1 = '' then begin
                 l := texts.Count;
               end else begin
