@@ -253,7 +253,7 @@ begin
     p := Pointer(PAnsiChar(cl) + vmtMethodtable);
     mt := p^;
     if Assigned(mt) then begin
-      for i:=0 to mt^.count-1 do begin
+      for i := 0 to mt^.Count - 1 do begin
         s:= LowerCase(mt^.entries[i].name^);
         if Copy(s, 1, 4) <> PROP_HEAD then continue;
         Delete(s, 1, 4);

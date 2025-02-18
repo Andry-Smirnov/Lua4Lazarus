@@ -116,12 +116,12 @@ begin
     GetCursorPos(DragPoint);
     Mouse.Capture := Self.Handle;
     DragImage := True;
-    Screen.Cursor:= crSize;
+    Screen.Cursor := crSize;
   end else if (Button = mbRight) then begin
     GetCursorPos(DragPoint);
     MovePage := True;
     Mouse.Capture := Self.Handle;
-    Screen.Cursor:= crHandPoint;
+    Screen.Cursor := crHandPoint;
   end;
 end;
 
@@ -166,7 +166,7 @@ procedure TFormPreview.FormMouseUp(Sender: TObject; Button: TMouseButton;
 begin
   if DragImage or MovePage then begin
     ReleaseCapture;
-    Screen.Cursor:= crDefault;
+    Screen.Cursor := crDefault;
     DragImage:= False;
     MovePage:= False;
   end;
@@ -214,7 +214,7 @@ begin
       end;
       else begin
         s:= ComboZoom.Text;
-        if (s <> '') and (s[Length(s)] = '%') then s:= Copy(s, 1, Length(s)-1);
+        if (s <> '') and (s[Length(s)] = '%') then s:= Copy(s, 1, Length(s) - 1);
         i:= StrToIntDef(s, 0);
         if (i >= 10) and (i <= 1000) then Zoom:= i;
       end;
@@ -231,7 +231,7 @@ begin
     Image.Picture.Bitmap.SetSize(w, h);
 
     Image.Canvas.Brush.Style:= bsSolid;
-    Image.Canvas.Brush.Color:= clWhite;
+    Image.Canvas.Brush.Color := clWhite;
     Image.Canvas.FillRect(0, 0, w, h);
     LP.Play(ScrollBar.Position, Image.Canvas, dpi, Zoom);
     ScrollBox.Invalidate;
@@ -299,11 +299,11 @@ begin
   inherited;
   ScrollBox.Canvas.Pen.Style:= psSolid;
   ScrollBox.Canvas.Pen.Width:= FRAME_SIZE;
-  ScrollBox.Canvas.Pen.Color:= clGray;
+  ScrollBox.Canvas.Pen.Color := clGray;
   ScrollBox.Canvas.Pen.JoinStyle := pjsMiter;
   ScrollBox.Canvas.Brush.Style:= bsClear;
-  ScrollBox.Canvas.Brush.Color:= clWhite;
-  r:= Image.BoundsRect;
+  ScrollBox.Canvas.Brush.Color := clWhite;
+  r := Image.BoundsRect;
   InflateRect(r, FRAME_SIZE, FRAME_SIZE);
   ScrollBox.Canvas.Rectangle(r);
 end;

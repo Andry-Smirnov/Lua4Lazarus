@@ -302,9 +302,9 @@ procedure TLuaPrint.PopCanvas;
 var
   c: TCanvas;
 begin
-  c := TCanvas(FCanvasStack[FCanvasStack.Count-1]);
+  c := TCanvas(FCanvasStack[FCanvasStack.Count - 1]);
   CopyCanvas(c, FCanvas);
-  FCanvasStack.Delete(FCanvasStack.Count-1);
+  FCanvasStack.Delete(FCanvasStack.Count - 1);
 end;
 
 function TLuaPrint.LP2DP(lp: integer): integer;
@@ -319,7 +319,7 @@ end;
 
 procedure TLuaPrint.AddOrder(const s: string);
 begin
-  TStringList(FPageList[FPageList.Count-1]).Add(s);
+  TStringList(FPageList[FPageList.Count - 1]).Add(s);
 end;
 
 constructor TLuaPrint.Create(L : Plua_State);
@@ -342,7 +342,7 @@ end;
 
 procedure TLuaPrint.BeginDoc;
 begin
-  BeginDoc(types.Rect(0,0,0,0));
+  BeginDoc(types.Rect(0, 0, 0, 0));
 end;
 
 procedure TLuaPrint.BeginDoc(Margin: TRect);
@@ -381,9 +381,9 @@ begin
   PopCanvas;
   FCanvasStack.Clear;
   if FPageList.Count > 0 then begin
-    if TStringList(FPageList[FPageList.Count-1]).Count = 0 then begin
-      FPageList.Delete(FPageList.Count-1);
-      FBmpList.Delete(FBmpList.Count-1);
+    if TStringList(FPageList[FPageList.Count - 1]).Count = 0 then begin
+      FPageList.Delete(FPageList.Count - 1);
+      FBmpList.Delete(FBmpList.Count - 1);
     end;
   end;
   FCanvas := nil;
@@ -417,7 +417,7 @@ end;
 procedure TLuaPrint.Play(pageNumber: integer; Cv: TCanvas; dpi: integer;
   Zoom: integer);
 begin
-  Play(pageNumber, Cv, types.Rect(0,0,0,0), dpi, Zoom);
+  Play(pageNumber, Cv, types.Rect(0, 0, 0, 0), dpi, Zoom);
 end;
 
 procedure TLuaPrint.Play(pageNumber: integer; Cv: TCanvas; Margin: TRect;
@@ -506,8 +506,8 @@ begin
   Result := '"';
   for i:= 1 to Length(s) do begin
     case s[i] of
-      #$0a: Result:=Result + '\r';
-      #$0d: Result:=Result + '\n';
+      #$0a: Result := Result + '\r';
+      #$0d: Result := Result + '\n';
       '"': Result:= Result + '\"';
       '\': Result:= Result + '\\';
       else Result := Result + s[i];
@@ -670,7 +670,7 @@ begin
        Format(PRUN_NAME + '.drawimage(%d,%d,%d,%d,%d,%s)',
        [LP2DP(lua_tointeger(LS, 1)), LP2DP(lua_tointeger(LS, 2)),
         LP2DP(lua_tointeger(LS, 3)), LP2DP(lua_tointeger(LS, 4)),
-        LuaPrint.FResList.Count-1, str_param(ExtractFileExt(fn))]));
+        LuaPrint.FResList.Count - 1, str_param(ExtractFileExt(fn))]));
     end;
   end;
   Result := 0;
@@ -1100,7 +1100,7 @@ begin
       PPP[l+i-1] := types.Point(zx(lua_tointeger(LS, i*2-1)), zy(lua_tointeger(LS, i*2)));
     end;
     SetLength(PPC, Length(PPC)+1);
-    PPC[Length(PPC)-1] := c div 2;
+    PPC[Length(PPC) - 1] := c div 2;
 {$ENDIF}
   end else begin
 {$IFDEF USE_AGG}
@@ -1151,7 +1151,7 @@ begin
       SetLength(PPP, l + c);
       for i := 1 to c do PPP[l+i-1] := (pp+i-1)^;
       SetLength(PPC, Length(PPC)+1);
-      PPC[Length(PPC)-1] := c;
+      PPC[Length(PPC) - 1] := c;
 {$ENDIF}
     finally
       FreeMem(pp);
@@ -1179,7 +1179,7 @@ begin
   try
     lw := LuaPrint.FCanvas.Pen.Width;
     AggLCLCanvas.Pen.AggLineWidth:= lw;
-    AggLCLCanvas.Pen.Color:= LuaPrint.FCanvas.Pen.Color;
+    AggLCLCanvas.Pen.Color := LuaPrint.FCanvas.Pen.Color;
     case LuaPrint.FCanvas.Pen.EndCap of
       pecRound: AggLCLCanvas.Pen.AggLineCap:= AGG_CapRound;
       pecSquare: AggLCLCanvas.Pen.AggLineCap:= AGG_CapSquare;
@@ -1190,7 +1190,7 @@ begin
       pjsBevel: AggLCLCanvas.Pen.AggLineJoin:= AGG_JoinBevel;
       pjsMiter: AggLCLCanvas.Pen.AggLineJoin:= AGG_JoinMiter;
     end;
-    AggLCLCanvas.Brush.Color:= LuaPrint.FCanvas.Brush.Color;
+    AggLCLCanvas.Brush.Color := LuaPrint.FCanvas.Brush.Color;
     AggLCLCanvas.Brush.AggFillEvenOdd:= not w;
     AggLCLCanvas.Image.SetSize(rx2-rx1+1+lw*2, ry2-ry1+1+lw*2);
     AggLCLCanvas.Erase;

@@ -147,7 +147,7 @@ begin
       end else begin
         p:= lua_touserdata(L, -1);
         TVarData(va^).vtype:= varVariant or varByRef;
-        TVarData(va^).vpointer:= p;
+        TVarData(va^).vpointer := p;
       end;
       lua_pop(L, 2);
     end;
@@ -211,7 +211,7 @@ begin
     param.cNamedArgs := 0;
     VariantInit(TVarData({%H-}ret));
 
-    hr:= id.Invoke(di, GUID_NULL, GetUserDefaultLCID,
+    hr := id.Invoke(di, GUID_NULL, GetUserDefaultLCID,
                    DISPATCH_PROPERTYGET, param, @ret, nil, nil);
     if hr = 0 then begin
       // Return property value
@@ -307,7 +307,7 @@ begin
           luaL_unref(L, LUA_REGISTRYINDEX, Integer(sink^.EventList.Objects[i]));
           // Save new function to REGISTRY
           lua_pushvalue(L, 3);
-          sink^.EventList.Objects[i]:= TObject(luaL_Ref(L, LUA_REGISTRYINDEX));
+          sink^.EventList.Objects[i] := TObject(luaL_Ref(L, LUA_REGISTRYINDEX));
         end else begin
           if sink^.EventList.Count = 0 then
             sink^.AttachEvent(id); // Start event receive
@@ -748,7 +748,7 @@ destructor TEventSink.Destroy;
 var
   i: Integer;
 begin
-  for i:= 0 to EventList.Count-1 do
+  for i:= 0 to EventList.Count - 1 do
     luaL_unref(L, LUA_REGISTRYINDEX, Integer(EventList.Objects[i]));
   EventList.Free;
   if IsEventSupport then

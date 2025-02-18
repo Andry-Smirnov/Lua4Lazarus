@@ -53,7 +53,7 @@ begin
     Exit;
   end;
 
-  for i := 0 to Printer.Printers.Count-1 do begin
+  for i := 0 to Printer.Printers.Count - 1 do begin
     ComboBox1.Items.Add(Printer.Printers[i]);
   end;
   ComboBox1.ItemIndex:= Printer.PrinterIndex;
@@ -64,11 +64,11 @@ procedure TForm1.ComboBox1Select(Sender: TObject);
 begin
   Memo1.Clear;
   try
-    Screen.Cursor:= crHourglass;
+    Screen.Cursor := crHourglass;
     try
       Printer.PrinterIndex:= ComboBox1.ItemIndex;
     finally
-      Screen.Cursor:= crDefault;
+      Screen.Cursor := crDefault;
     end;
   except
     on e: Exception do begin

@@ -237,7 +237,7 @@ destructor TPDFReader.Destroy;
 var
   i : integer;
 begin
-  for i := 0 to objs.Count-1 do objs.Objects[i].Free;
+  for i := 0 to objs.Count - 1 do objs.Objects[i].Free;
   objs.Free;
   inherited Destroy;
 end;
@@ -338,7 +338,7 @@ var
   o: TPDFObj;
 begin
   Result := nil;
-  for i := 0 to objs.Count-1 do begin
+  for i := 0 to objs.Count - 1 do begin
     o := TPDFObj(objs.Objects[i]);
     if (Pos('/Type/Page', o.val) > 0) and (Pos('/Contents', o.val) > 0) then begin
       Dec(no);
@@ -537,7 +537,7 @@ destructor TFontObj.Destroy;
 var
   i: Integer;
 begin
-  for i := 0 to l.Count-1 do l.Objects[i].Free;
+  for i := 0 to l.Count - 1 do l.Objects[i].Free;
   l.Free;
   inherited Destroy;
 end;
@@ -643,7 +643,7 @@ var
   begin
     for i:=1 to 3 do begin
       for j:=1 to 3 do begin
-        Result[i][j]:= 0;
+        Result[i][j] := 0;
         for k := 1 to 3 do begin
           Result[i][j] := Result[i][j] + m1[i][k] * m2[k][j];
         end;
@@ -703,16 +703,16 @@ var
       texts := TObjectList.Create(False);
       try
         sp := PChar(cmd);
-        Tl:=0; Tc := 0; Tw := 0; Trise:=0; Th:=1;
+        Tl:=0; Tc := 0; Tw := 0; Trise := 0; Th:=1;
         Tf := ''; Tf_index := -1;
         LPO.LuaPrint.Canvas.Pen.JoinStyle:= pjsMiter;
         LPO.LuaPrint.Canvas.Pen.EndCap:= pecFlat;
         while sp^ <> #0 do begin
           cm := TokenStr(sp);
           if cm = 'BT' then begin
-            Tlm[1][1] := 1; Tlm[1][2]:=0;Tlm[1][3]:=0;
-            Tlm[2][1] := 0; Tlm[2][2]:=1;Tlm[2][3]:=0;
-            Tlm[3][1] := 0; Tlm[3][2]:=0;Tlm[3][3]:=1;
+            Tlm[1][1] := 1; Tlm[1][2] := 0;Tlm[1][3] := 0;
+            Tlm[2][1] := 0; Tlm[2][2]:=1;Tlm[2][3] := 0;
+            Tlm[3][1] := 0; Tlm[3][2] := 0;Tlm[3][3]:=1;
             Tm := Tlm;
             ss.Clear;
           end else if cm = 'ET' then begin
@@ -729,30 +729,30 @@ var
             xy := TDblXY.Create;
             xy.tst:= tstM;
             xy.x:= StrToFloat(ss[ss.Count-2]);
-            xy.y := StrToFloat(ss[ss.Count-1]);
+            xy.y := StrToFloat(ss[ss.Count - 1]);
             sx := xy.x;
             sy := xy.y;
             params.Add(xy);
             ss.Clear;
           end else if cm = 'l' then begin
-            if TDblXY(params[params.Count-1]).tst = tstBez then begin
+            if TDblXY(params[params.Count - 1]).tst = tstBez then begin
               xy := TDblXY.Create;
               xy.tst:= tstM;
-              xy.x:= TDblXY(params[params.Count-1]).x;
-              xy.y := TDblXY(params[params.Count-1]).y;
+              xy.x:= TDblXY(params[params.Count - 1]).x;
+              xy.y := TDblXY(params[params.Count - 1]).y;
               params.Add(xy);
             end;
             xy := TDblXY.Create;
             xy.x:= StrToFloat(ss[ss.Count-2]);
-            xy.y := StrToFloat(ss[ss.Count-1]);
+            xy.y := StrToFloat(ss[ss.Count - 1]);
             params.Add(xy);
             ss.Clear;
           end else if cm = 'c' then begin
-            if TDblXY(params[params.Count-1]).tst = tstNone then begin
+            if TDblXY(params[params.Count - 1]).tst = tstNone then begin
               xy := TDblXY.Create;
               xy.tst:= tstM;
-              xy.x:= TDblXY(params[params.Count-1]).x;
-              xy.y := TDblXY(params[params.Count-1]).y;
+              xy.x:= TDblXY(params[params.Count - 1]).x;
+              xy.y := TDblXY(params[params.Count - 1]).y;
               params.Add(xy);
             end;
             xy := TDblXY.Create;
@@ -768,18 +768,18 @@ var
             xy := TDblXY.Create;
             xy.tst:= tstBez;
             xy.x:= StrToFloat(ss[ss.Count-2]);
-            xy.y := StrToFloat(ss[ss.Count-1]);
+            xy.y := StrToFloat(ss[ss.Count - 1]);
             params.Add(xy);
             ss.Clear;
           end else if cm = 'h' then begin
             if (params.Count > 0) and
-             ((TDblXY(params[params.Count-1]).x <> sx) or
-              (TDblXY(params[params.Count-1]).y <> sy)) then begin
-              if TDblXY(params[params.Count-1]).tst = tstBez then begin
+             ((TDblXY(params[params.Count - 1]).x <> sx) or
+              (TDblXY(params[params.Count - 1]).y <> sy)) then begin
+              if TDblXY(params[params.Count - 1]).tst = tstBez then begin
                 xy := TDblXY.Create;
                 xy.tst:= tstM;
-                xy.x:= TDblXY(params[params.Count-1]).x;
-                xy.y := TDblXY(params[params.Count-1]).y;
+                xy.x:= TDblXY(params[params.Count - 1]).x;
+                xy.y := TDblXY(params[params.Count - 1]).y;
                 params.Add(xy);
               end;
               xy := TDblXY.Create;
@@ -796,12 +796,12 @@ var
             params.Add(xy);
             xy := TDblXY.Create;
             xy.x:= StrToFloat(ss[ss.Count-2]);
-            xy.y := StrToFloat(ss[ss.Count-1]);
+            xy.y := StrToFloat(ss[ss.Count - 1]);
             params.Add(xy);
             ss.Clear;
             ////////////////////////////////
           end else if cm = 'J' then begin
-            case Trunc(StrToFloat(ss[ss.Count-1])) of
+            case Trunc(StrToFloat(ss[ss.Count - 1])) of
               1: i:= Integer(pecRound);
               2: i:= Integer(pecSquare);
               else i:= Integer(pecFlat);
@@ -810,7 +810,7 @@ var
             LPO.LuaPrint.Canvas.Pen.EndCap:= TPenEndCap(i);
             ss.Clear;
           end else if cm = 'j' then begin
-            case Trunc(StrToFloat(ss[ss.Count-1])) of
+            case Trunc(StrToFloat(ss[ss.Count - 1])) of
               1: i:= Integer(pjsRound);
               2: i:= Integer(pjsBevel);
               else i:= Integer(pjsMiter);
@@ -820,36 +820,36 @@ var
             ss.Clear;
             ////////////////////////////////
           end else if cm = 'G' then begin
-            x1 := StrToFloat(ss[ss.Count-1]);
+            x1 := StrToFloat(ss[ss.Count - 1]);
             i := RGBToColor(Trunc(255*x1), Trunc(255*x1), Trunc(255*x1));
             LPO.LuaPrint.AddOrder(Format(PRUN_NAME + '.pen_color(%d)', [i]));
-            LPO.LuaPrint.Canvas.Pen.Color:= i;
+            LPO.LuaPrint.Canvas.Pen.Color := i;
             ss.Clear;
           end else if cm = 'g' then begin
-            x1 := StrToFloat(ss[ss.Count-1]);
+            x1 := StrToFloat(ss[ss.Count - 1]);
             i := RGBToColor(Trunc(255*x1), Trunc(255*x1), Trunc(255*x1));
             LPO.LuaPrint.AddOrder(Format(PRUN_NAME + '.brush_color(%d)', [i]));
-            LPO.LuaPrint.Canvas.Brush.Color:= i;
+            LPO.LuaPrint.Canvas.Brush.Color := i;
             ss.Clear;
           end else if cm = 'RG' then begin
             i := RGBToColor(
              Trunc(255*StrToFloat(ss[ss.Count-3])),
              Trunc(255*StrToFloat(ss[ss.Count-2])),
-             Trunc(255*StrToFloat(ss[ss.Count-1])));
+             Trunc(255*StrToFloat(ss[ss.Count - 1])));
             LPO.LuaPrint.AddOrder(Format(PRUN_NAME + '.pen_color(%d)', [i]));
-            LPO.LuaPrint.Canvas.Pen.Color:= i;
+            LPO.LuaPrint.Canvas.Pen.Color := i;
             ss.Clear;
           end else if cm = 'rg' then begin
             i := RGBToColor(
              Trunc(255*StrToFloat(ss[ss.Count-3])),
              Trunc(255*StrToFloat(ss[ss.Count-2])),
-             Trunc(255*StrToFloat(ss[ss.Count-1])));
+             Trunc(255*StrToFloat(ss[ss.Count - 1])));
             LPO.LuaPrint.AddOrder(Format(PRUN_NAME + '.brush_color(%d)', [i]));
-            LPO.LuaPrint.Canvas.Brush.Color:= i;
+            LPO.LuaPrint.Canvas.Brush.Color := i;
             ss.Clear;
           ////////////////////////////////
           end else if cm = 'w' then begin
-            i := Trunc(StrToFloat(ss[ss.Count-1]) * Rate);
+            i := Trunc(StrToFloat(ss[ss.Count - 1]) * Rate);
             LPO.LuaPrint.AddOrder(Format(PRUN_NAME + '.pen_width(%d)', [i]));
             ss.Clear;
           ////////////////////////////////
@@ -861,13 +861,13 @@ var
            (cm = 'f*') or (cm = 'b*') or (cm = 'B') or (cm = 'B*') then begin
             if params.Count > 0 then begin
               if ((cm = 's') or (cm = 'b')) and
-               ((TDblXY(params[params.Count-1]).x <> sx) or
-                (TDblXY(params[params.Count-1]).y <> sy)) then begin
-                if TDblXY(params[params.Count-1]).tst = tstBez then begin
+               ((TDblXY(params[params.Count - 1]).x <> sx) or
+                (TDblXY(params[params.Count - 1]).y <> sy)) then begin
+                if TDblXY(params[params.Count - 1]).tst = tstBez then begin
                   xy := TDblXY.Create;
                   xy.tst:= tstM;
-                  xy.x:= TDblXY(params[params.Count-1]).x;
-                  xy.y := TDblXY(params[params.Count-1]).y;
+                  xy.x:= TDblXY(params[params.Count - 1]).x;
+                  xy.y := TDblXY(params[params.Count - 1]).y;
                   params.Add(xy);
                 end;
                 xy := TDblXY.Create;
@@ -974,7 +974,7 @@ var
             Tm[2][2] := StrToFloat(ss[ss.Count-3]); // d
             Tm[2][3] := 0;
             Tm[3][1] := StrToFloat(ss[ss.Count-2]); // e = x
-            Tm[3][2] := StrToFloat(ss[ss.Count-1]); // f = y
+            Tm[3][2] := StrToFloat(ss[ss.Count - 1]); // f = y
             Tm[3][3] := 1;
             Tlm := Tm;
             ss.Clear;
@@ -982,7 +982,7 @@ var
             m1[1][1] := 1; m1[1][2] := 0; m1[1][3] := 0;
             m1[2][1] := 0; m1[2][2] := 1; m1[2][3] := 0;
             m1[3][1] := StrToFloat(ss[ss.Count-2]);
-            m1[3][2] := StrToFloat(ss[ss.Count-1]);
+            m1[3][2] := StrToFloat(ss[ss.Count - 1]);
             m1[3][3] := 1;
             Tlm := matrixmul(m1, Tlm);
             Tm := Tlm;
@@ -991,7 +991,7 @@ var
             m1[1][1] := 1; m1[1][2] := 0; m1[1][3] := 0;
             m1[2][1] := 0; m1[2][2] := 1; m1[2][3] := 0;
             m1[3][1] := StrToFloat(ss[ss.Count-2]);
-            m1[3][2] := StrToFloat(ss[ss.Count-1]);
+            m1[3][2] := StrToFloat(ss[ss.Count - 1]);
             m1[3][3] := 1;
             Tlm := matrixmul(m1, Tlm);
             Tm := Tlm;
@@ -1007,22 +1007,22 @@ var
             Tm := Tlm;
             ss.Clear;
           end else if cm = 'TL' then begin
-            Tl := StrToFloat(ss[ss.Count-1]);
+            Tl := StrToFloat(ss[ss.Count - 1]);
             ss.Clear;
           end else if cm = 'Tc' then begin
-            Tc := StrToFloat(ss[ss.Count-1]);
+            Tc := StrToFloat(ss[ss.Count - 1]);
             ss.Clear;
           end else if cm = 'Tw' then begin
-            Tw := StrToFloat(ss[ss.Count-1]);
+            Tw := StrToFloat(ss[ss.Count - 1]);
             ss.Clear;
           end else if cm = 'Tz' then begin
-            Th := StrToFloat(ss[ss.Count-1]) / 100;
+            Th := StrToFloat(ss[ss.Count - 1]) / 100;
             ss.Clear;
           end else if cm = 'Tr' then begin
-          //  Tmode := StrToInt(ss[ss.Count-1]);
+          //  Tmode := StrToInt(ss[ss.Count - 1]);
             ss.Clear;
           end else if cm = 'Ts' then begin
-            Trise := StrToFloat(ss[ss.Count-1]);
+            Trise := StrToFloat(ss[ss.Count - 1]);
             ss.Clear;
           end else if cm = 'Tf' then begin
             Tf := ss[ss.Count-2];
@@ -1032,10 +1032,10 @@ var
               LPO.LuaPrint.AddOrder(Format(PRUN_NAME + '.font_name("%s")', [s]));
               LPO.LuaPrint.Canvas.Font.Name:= s;
             end;
-            Tfs := StrToFloat(ss[ss.Count-1]);
+            Tfs := StrToFloat(ss[ss.Count - 1]);
             ss.Clear;
           end else if cm = 'Tj' then begin
-            s := ss[ss.Count-1];
+            s := ss[ss.Count - 1];
             texts.Clear;
             while True do begin
               if s[1] = '(' then begin
@@ -1054,9 +1054,15 @@ var
                 s := '';
               end;
 
-              m1[1][1] := Tfs * Th; m1[1][2]:=0;   m1[1][3]:=0;
-              m1[2][1]:=0;          m1[2][2]:=Tfs; m1[2][3]:=0;
-              m1[3][1]:= 0;         m1[3][2]:= Trise; m1[3][3]:= 1;
+              m1[1][1] := Tfs * Th; 
+              m1[1][2] := 0;   
+              m1[1][3] := 0;
+              m1[2][1] := 0;          
+              m1[2][2]:=Tfs; 
+              m1[2][3] := 0;
+              m1[3][1] := 0;         
+              m1[3][2] := Trise; 
+              m1[3][3] := 1;
               m2 := matrixmul(m1, Tm);
               LPO.LuaPrint.AddOrder(Format(PRUN_NAME + '.font_height(%d)',
                [-Trunc(m2[2][2]*Rate)]));
@@ -1077,31 +1083,31 @@ var
                 end;
                 LPO.LuaPrint.AddOrder(Format(PRUN_NAME + '.textout(%d,%d,"%s")',
                  [Trunc(m2[3][1]*Rate), Trunc((PageH-m2[3][2]-m2[2][2])*Rate), s2]));
-                m1[1][1]:= 1; m1[1][2]:=0; m1[1][3]:=0;
-                m1[2][1]:= 0; m1[2][2]:=1; m1[2][3]:=0;
+                m1[1][1] := 1; m1[1][2] := 0; m1[1][3] := 0;
+                m1[2][1] := 0; m1[2][2]:=1; m1[2][3] := 0;
                 if (texts.Count > 0) and (TCidObj(texts[j-1]).width <> 0) then begin
-                  m1[3][1]:= (TCidObj(texts[j-1]).width*Tfs/1000+Tc)*Th;
-                  if s2 = ' ' then m1[3][1]:= m1[3][1] + Tw*Th;
-                  m1[3][2]:= 0; m1[3][3]:= 1;
+                  m1[3][1] := (TCidObj(texts[j-1]).width*Tfs/1000+Tc)*Th;
+                  if s2 = ' ' then m1[3][1] := m1[3][1] + Tw*Th;
+                  m1[3][2] := 0; m1[3][3] := 1;
                   Tm := matrixmul(m1, Tm);
                 end else begin
-                  m1[3][1]:= Tc*Th;
-                  if s2 = ' ' then m1[3][1]:= m1[3][1] + Tw*Th;
-                  m1[3][2]:= 0; m1[3][3]:= 1;
+                  m1[3][1] := Tc*Th;
+                  if s2 = ' ' then m1[3][1] := m1[3][1] + Tw*Th;
+                  m1[3][2] := 0; m1[3][3] := 1;
                   Tm := matrixmul(m1, Tm);
-                  Tm[3][1]:= Tm[3][1] + LPO.LuaPrint.Canvas.TextWidth(s2)*Th;
+                  Tm[3][1] := Tm[3][1] + LPO.LuaPrint.Canvas.TextWidth(s2)*Th;
                 end;
 
-                m1[1][1] := Tfs * Th; m1[1][2]:=0;   m1[1][3]:=0;
-                m1[2][1]:=0;          m1[2][2]:=Tfs; m1[2][3]:=0;
-                m1[3][1]:= 0;         m1[3][2]:= Trise; m1[3][3]:= 1;
+                m1[1][1] := Tfs * Th; m1[1][2] := 0;   m1[1][3] := 0;
+                m1[2][1] := 0;          m1[2][2]:=Tfs; m1[2][3] := 0;
+                m1[3][1] := 0;         m1[3][2] := Trise; m1[3][3] := 1;
                 m2 := matrixmul(m1, Tm);
               end;
               break;
             end;
             ss.Clear;
           end else if cm = 'TJ' then begin
-            s := ss[ss.Count-1];
+            s := ss[ss.Count - 1];
             sp1 := PChar(s) + 1;
             while sp1^ <> ']' do begin
               s1 := TokenStr(sp1);
@@ -1121,17 +1127,17 @@ var
                  and (TFontObj(fonts.Objects[Tf_index]).l.Count > 0) then
                   TFontObj(fonts.Objects[Tf_index]).ascii_w(s1, texts);
               end else begin
-                m1[1][1]:= 1; m1[1][2]:=0; m1[1][3]:=0;
-                m1[2][1]:= 0; m1[2][2]:=1; m1[2][3]:=0;
-                m1[3][1]:= -StrToFloat(s1) * Tfs * Th / 1000;
-                m1[3][2]:= 0; m1[3][3]:= 1;
+                m1[1][1] := 1; m1[1][2] := 0; m1[1][3] := 0;
+                m1[2][1] := 0; m1[2][2]:=1; m1[2][3] := 0;
+                m1[3][1] := -StrToFloat(s1) * Tfs * Th / 1000;
+                m1[3][2] := 0; m1[3][3] := 1;
                 Tm := matrixmul(m1, Tm);
                 continue;
               end;
 
-              m1[1][1] := Tfs * Th; m1[1][2]:=0;   m1[1][3]:=0;
-              m1[2][1]:=0;          m1[2][2]:=Tfs; m1[2][3]:=0;
-              m1[3][1]:= 0;         m1[3][2]:= Trise; m1[3][3]:= 1;
+              m1[1][1] := Tfs * Th; m1[1][2] := 0;   m1[1][3] := 0;
+              m1[2][1] := 0;          m1[2][2]:=Tfs; m1[2][3] := 0;
+              m1[3][1] := 0;         m1[3][2] := Trise; m1[3][3] := 1;
               m2 := matrixmul(m1, Tm);
               LPO.LuaPrint.AddOrder(Format(PRUN_NAME + '.font_height(%d)',
                [-Trunc(m2[2][2]*Rate)]));
@@ -1151,24 +1157,24 @@ var
                 end;
                 LPO.LuaPrint.AddOrder(Format(PRUN_NAME + '.textout(%d,%d,"%s")',
                  [Trunc(m2[3][1]*Rate), Trunc((PageH-m2[3][2]-m2[2][2])*Rate), s2]));
-                m1[1][1]:= 1; m1[1][2]:=0; m1[1][3]:=0;
-                m1[2][1]:= 0; m1[2][2]:=1; m1[2][3]:=0;
+                m1[1][1] := 1; m1[1][2] := 0; m1[1][3] := 0;
+                m1[2][1] := 0; m1[2][2]:=1; m1[2][3] := 0;
                 if (texts.Count > 0) and (TCidObj(texts[j-1]).width <> 0) then begin
-                  m1[3][1]:= (TCidObj(texts[j-1]).width*Tfs/1000+Tc)*Th;
-                  if s2 = ' ' then m1[3][1]:= m1[3][1] + Tw*Th;
-                  m1[3][2]:= 0; m1[3][3]:= 1;
+                  m1[3][1] := (TCidObj(texts[j-1]).width*Tfs/1000+Tc)*Th;
+                  if s2 = ' ' then m1[3][1] := m1[3][1] + Tw*Th;
+                  m1[3][2] := 0; m1[3][3] := 1;
                   Tm := matrixmul(m1, Tm);
                 end else begin
-                  m1[3][1]:= Tc*Th;
-                  if s2 = ' ' then m1[3][1]:= m1[3][1] + Tw*Th;
-                  m1[3][2]:= 0; m1[3][3]:= 1;
+                  m1[3][1] := Tc*Th;
+                  if s2 = ' ' then m1[3][1] := m1[3][1] + Tw*Th;
+                  m1[3][2] := 0; m1[3][3] := 1;
                   Tm := matrixmul(m1, Tm);
-                  Tm[3][1]:= Tm[3][1] + LPO.LuaPrint.Canvas.TextWidth(s2)*Th;
+                  Tm[3][1] := Tm[3][1] + LPO.LuaPrint.Canvas.TextWidth(s2)*Th;
                 end;
 
-                m1[1][1] := Tfs * Th; m1[1][2]:=0;   m1[1][3]:=0;
-                m1[2][1]:=0;          m1[2][2]:=Tfs; m1[2][3]:=0;
-                m1[3][1]:= 0;         m1[3][2]:= Trise; m1[3][3]:= 1;
+                m1[1][1] := Tfs * Th; m1[1][2] := 0;   m1[1][3] := 0;
+                m1[2][1] := 0;          m1[2][2]:=Tfs; m1[2][3] := 0;
+                m1[3][1] := 0;         m1[3][2] := Trise; m1[3][3] := 1;
                 m2 := matrixmul(m1, Tm);
               end;
             end;
@@ -1232,16 +1238,16 @@ begin
       if sp1^ = '/' then begin
         fonts.Add('');
         while not(sp1^ in [#0, ' ']) do begin
-          fonts[fonts.Count-1] := fonts[fonts.Count-1] + sp1^;
+          fonts[fonts.Count - 1] := fonts[fonts.Count - 1] + sp1^;
           Inc(sp1);
         end;
         i := StrToInt(TokenStr(sp1));
-        fonts.Objects[fonts.Count-1]:= TObject(i);
+        fonts.Objects[fonts.Count - 1] := TObject(i);
       end;
       Inc(sp1);
     end;
 
-    for i := 0 to fonts.Count-1 do begin
+    for i := 0 to fonts.Count - 1 do begin
       pdfobj := pdfr.FindObj(IntToStr(Integer(fonts.Objects[i])));
       fonts.Objects[i] := nil;
       if pdfobj <> nil then begin
@@ -1294,14 +1300,14 @@ begin
           s1 := pdfr.GetVal('/Flags', s);
           if StrToIntDef(s1, 0) and 1 <> 0 then begin
             //FixedPitch
-            for j := 0 to TFontObj(fonts.Objects[i]).l.Count-1 do begin
+            for j := 0 to TFontObj(fonts.Objects[i]).l.Count - 1 do begin
               if Length(TCidObj(TFontObj(fonts.Objects[i]).l.Objects[j]).utf8) = 1 then
                 TCidObj(TFontObj(fonts.Objects[i]).l.Objects[j]).width := 500
               else
                 TCidObj(TFontObj(fonts.Objects[i]).l.Objects[j]).width := 1000;
             end;
           end else begin
-            for j := 0 to TFontObj(fonts.Objects[i]).l.Count-1 do
+            for j := 0 to TFontObj(fonts.Objects[i]).l.Count - 1 do
               TCidObj(TFontObj(fonts.Objects[i]).l.Objects[j]).width := 1000;
           end;
         end;
@@ -1342,7 +1348,7 @@ begin
       DrawPage(s);
     end;
   finally
-    for i := 0 to fonts.Count-1 do fonts.Objects[i].Free;
+    for i := 0 to fonts.Count - 1 do fonts.Objects[i].Free;
     fonts.Free;
     pdfr.Free;
     sl.Free;
