@@ -81,10 +81,10 @@ type
 function Alloc({%H-}ud, ptr: Pointer; {%H-}osize, nsize: size_t) : Pointer; cdecl;
 begin
   try
-    Result:= ptr;
+    Result := ptr;
     ReallocMem(Result, nSize);
   except
-    Result:= nil;
+    Result := nil;
   end;
 end;
 
@@ -93,7 +93,7 @@ var
   p: PLuaThread;
 begin
   lua_getfield(L, LUA_REGISTRYINDEX, THREAD_VAR_NAME);
-  p:= lua_touserdata(L, -1);
+  p := lua_touserdata(L, -1);
   Lua_pop(L, 1);
   if p^.Terminated then SysUtils.Abort;
 end;
@@ -109,40 +109,40 @@ var
   p: PLuaThread;
 begin
   // garbage collection
-  i:= 0;
+  i := 0;
   while i < ThreadList.Count do
+  begin
+    t := TLuaThread(ThreadList[i]);
+    if t.finished then
     begin
-      t:= TLuaThread(ThreadList[i]);
-      if t.finished then
-        begin
-          t.Free;
-          ThreadList.Delete(i);
-        end
-      else
-        Inc(i);
-    end;
+      t.Free;
+      ThreadList.Delete(i);
+    end
+    else
+      Inc(i);
+  end;
 
   // Start New thread.
-  L:= lua_newstate(@alloc, nil);
+  L := lua_newstate(@alloc, nil);
   lua_sethook(L, @hook, LUA_MASKLINE, 0);
   l4l_PushLuaObject(TLuaMyObject.Create(L)); lua_setglobal(L, 'my'); // set global value.
-  s:= Memo1.Text;
+  s := Memo1.Text;
   if luaL_loadbuffer(L, PChar(s), Length(s), 'sample') <> 0 then
-    begin
-      Form1.Memo2.Lines.Add(lua_tostring(L, -1));
-      Form1.Memo2.SelStart:= 0;
-      Form1.Memo2.SelLength:= 0;
-      lua_close(L);
-      Exit;
-    end;
+  begin
+    Form1.Memo2.Lines.Add(lua_tostring(L, -1));
+    Form1.Memo2.SelStart := 0;
+    Form1.Memo2.SelLength := 0;
+    lua_close(L);
+    Exit;
+  end;
 
   t := TLuaThread.Create(L);
   ThreadList.Add(t);
-  p:= lua_newuserdata(L, SizeOf(Pointer));
-  p^:= t;
+  p := lua_newuserdata(L, SizeOf(Pointer));
+  p^ := t;
   lua_setfield(L, LUA_REGISTRYINDEX, THREAD_VAR_NAME);
 
-  Label1.Caption:= IntToStr(ThreadList.Count);
+  Label1.Caption := IntToStr(ThreadList.Count);
   Memo2.SetFocus;
 end;
 
@@ -155,20 +155,20 @@ end;
 procedure TForm1.FormDestroy(Sender: TObject);
 begin
   while ThreadList.Count > 0 do
-    begin
-      TLuaThread(ThreadList[0]).Free;
-      ThreadList.Delete(0);
-    end;
+  begin
+    TLuaThread(ThreadList[0]).Free;
+    ThreadList.Delete(0);
+  end;
   ThreadList.Free;
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   while ThreadList.Count > 0 do
-    begin
-      TLuaThread(ThreadList[0]).Free;
-      ThreadList.Delete(0);
-    end;
+  begin
+    TLuaThread(ThreadList[0]).Free;
+    ThreadList.Delete(0);
+  end;
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
@@ -203,7 +203,8 @@ begin
     //msg := 'Start: ' + IntToStr(Self.FThreadID);
     //Synchronize(@ShowMsg);
     try
-      if lua_pcall(L, 0, 0, 0) <> 0 then Exception.Create('');
+      if lua_pcall(L, 0, 0, 0) <> 0 then
+        Exception.Create('');
     except
       on E: EAbort do
         begin
@@ -258,10 +259,9 @@ var
   i, c: Integer;
   s: string;
 begin
-  c:= lua_gettop(LS);
-  s:= '';
-  for i:= 1 to c do
-    s:= s + lua_tostring(LS, i);
+  c := lua_gettop(LS);
+  s := '';
+  for i := 1 to c do s := s + lua_tostring(LS, i);
   Form1.Memo2.Lines.Insert(0, s);
   Form1.Memo2.SelStart := 0;
   Form1.Memo2.SelLength := 0;

@@ -267,19 +267,19 @@ end;
 
 function TLuaPrint.DP2LP(dp: Integer): Integer;
 begin
-  Result:= Trunc(MM_P_INCH * dp / FDPI + 0.5);
+  Result := Trunc(MM_P_INCH * dp / FDPI + 0.5);
 end;
 
 function TLuaPrint.GetPageSize: TSize;
 begin
   Result.cx := FPaperRect.PhysicalRect.Right-FRealMargin.Left-FRealMargin.Right;
-  Result.cy:= FPaperRect.PhysicalRect.Bottom-FRealMargin.Top-FRealMargin.Bottom;
+  Result.cy := FPaperRect.PhysicalRect.Bottom-FRealMargin.Top-FRealMargin.Bottom;
 end;
 
 function TLuaPrint.GetPaperSize: TSize;
 begin
   Result.cx := FPaperRect.PhysicalRect.Right;
-  Result.cy:= FPaperRect.PhysicalRect.Bottom;
+  Result.cy := FPaperRect.PhysicalRect.Bottom;
 end;
 
 procedure TLuaPrint.CopyCanvas(src, dst: TCanvas);
@@ -309,7 +309,7 @@ end;
 
 function TLuaPrint.LP2DP(lp: Integer): Integer;
 begin
-  Result:= Trunc(lp * FDPI / MM_P_INCH + 0.5);
+  Result := Trunc(lp * FDPI / MM_P_INCH + 0.5);
 end;
 
 function TLuaPrint.z(i: Integer): Integer;
@@ -325,9 +325,9 @@ end;
 constructor TLuaPrint.Create(L : Plua_State);
 begin
   LS := L;
-  FPageList:= TObjectList.Create(True);
-  FBmpList:= TObjectList.Create(True);
-  FResList:= TObjectList.Create(True);
+  FPageList := TObjectList.Create(True);
+  FBmpList := TObjectList.Create(True);
+  FResList := TObjectList.Create(True);
   FCanvasStack := TObjectList.Create(True);
 end;
 
@@ -368,9 +368,9 @@ begin
   FBmpList.Clear;
   bmp := graphics.TBitmap.Create;
   FBmpList.Add(bmp);
-  FCanvas:= bmp.Canvas;
-  FCanvas.Font.PixelsPerInch:= FDPI;
-  FCanvas.Font.Size:= 10;
+  FCanvas := bmp.Canvas;
+  FCanvas.Font.PixelsPerInch := FDPI;
+  FCanvas.Font.Size := 10;
   FCanvasStack.Clear;
   PushCanvas;
   FResList.Clear;
@@ -380,10 +380,12 @@ procedure TLuaPrint.EndDoc;
 begin
   PopCanvas;
   FCanvasStack.Clear;
-  if FPageList.Count > 0 then begin
-    if TStringList(FPageList[FPageList.Count - 1]).Count = 0 then begin
-      FPageList.Delete(FPageList.Count - 1);
-      FBmpList.Delete(FBmpList.Count - 1);
+  if FPageList.Count > 0 then
+  begin
+    if TStringList(FPageList[FPageList.Count-1]).Count = 0 then
+    begin
+      FPageList.Delete(FPageList.Count-1);
+      FBmpList.Delete(FBmpList.Count-1);
     end;
   end;
   FCanvas := nil;
@@ -398,8 +400,8 @@ begin
   FBmpList.Add(bmp);
   CopyCanvas(FCanvas, bmp.Canvas);
   PopCanvas;
-  FCanvas:= bmp.Canvas;
-  FCanvas.Font.PixelsPerInch:= Printer.YDPI;
+  FCanvas := bmp.Canvas;
+  FCanvas.Font.PixelsPerInch := Printer.YDPI;
   // We need to set FChanged:=true
   FCanvas.Font.Size:=FCanvas.Font.Size-1;
   FCanvas.Font.Size:=FCanvas.Font.Size+1;
@@ -428,12 +430,13 @@ var
   x, y: Integer;
   bmp: graphics.TBitmap;
 begin
-  if (pageNumber > 0) and (pageNumber <= PageCount) then begin
+  if (pageNumber > 0) and (pageNumber <= PageCount) then
+  begin
     if dpi = 0 then dpi := Cv.Font.PixelsPerInch;
-    FPlayDpi:= dpi;
+    FPlayDpi := dpi;
     FZoom := Zoom;
-    FOffset.x:= FRealMargin.Left;
-    FOffset.y:= FRealMargin.Top;
+    FOffset.x := FRealMargin.Left;
+    FOffset.y := FRealMargin.Top;
     x := FPaperRect.PhysicalRect.Right-FRealMargin.Right;
     y := FPaperRect.PhysicalRect.Bottom-FRealMargin.Bottom;
     Dec(FOffset.x, Margin.Left);
@@ -445,14 +448,14 @@ begin
     bmp := graphics.TBitmap(FBmpList[pageNumber-1]);
     CopyCanvas(bmp.Canvas, FCanvas);
     i := FCanvas.Font.Size;
-    FCanvas.Font.PixelsPerInch:= FPlayDpi;
-    FCanvas.Font.Size:= i + 1;
-    FCanvas.Font.Size:= i;
+    FCanvas.Font.PixelsPerInch := FPlayDpi;
+    FCanvas.Font.Size := i + 1;
+    FCanvas.Font.Size := i;
     FCanvas.Font.Height := FCanvas.Font.Height * FZoom div 100;
-    FCanvas.Pen.Width:= FCanvas.Pen.Width * FPlayDpi * FZoom div (FDPI * 100);
+    FCanvas.Pen.Width := FCanvas.Pen.Width * FPlayDpi * FZoom div (FDPI * 100);
 
-    FCanvas.ClipRect := types.Rect(0, 0, z(x) + 1, z(y) + 1);
-    FCanvas.Clipping:= True;
+    FCanvas.ClipRect := types.Rect(0, 0, z(x)+1, z(y)+1);
+    FCanvas.Clipping := True;
     try
       sl := TStringList(FPageList[pageNumber-1]);
       l4l_PushLuaObject(TLuaPrintRunObject.Create(LS, Self));
@@ -467,7 +470,7 @@ begin
         lua_setglobal(LS, PRUN_NAME);
       end;
     finally
-      FCanvas.Clipping:= False;
+      FCanvas.Clipping := False;
     end;
   end;
 end;
@@ -477,8 +480,10 @@ var
   i: Integer;
   m: TRect;
 begin
-  if beginPage < 1 then beginPage := 1;
-  if endPage < beginPage then endPage := FPageList.Count;
+  if beginPage < 1 then
+    beginPage := 1;
+  if endPage < beginPage then
+    endPage := FPageList.Count;
   Printer.BeginDoc;
   try
     m := types.Rect(
@@ -488,9 +493,11 @@ begin
       -Printer.PaperSize.PaperRect.WorkRect.Right,
      Printer.PaperSize.PaperRect.PhysicalRect.Bottom
       -Printer.PaperSize.PaperRect.WorkRect.Bottom);
-    for i := beginPage to endPage do begin
+    for i := beginPage to endPage do
+    begin
       Play(i, Printer.Canvas, m, Printer.YDPI, 100);
-      if i < endPage then Printer.NewPage;
+      if i < endPage then 
+        Printer.NewPage;
     end;
     Printer.EndDoc;
   except
@@ -504,12 +511,13 @@ var
   i: Integer;
 begin
   Result := '"';
-  for i:= 1 to Length(s) do begin
+  for i := 1 to Length(s) do
+  begin
     case s[i] of
       #$0a: Result := Result + '\r';
       #$0d: Result := Result + '\n';
-      '"': Result:= Result + '\"';
-      '\': Result:= Result + '\\';
+      '"': Result := Result + '\"';
+      '\': Result := Result + '\\';
       else Result := Result + s[i];
     end;
   end;
@@ -523,15 +531,16 @@ var
   i : Integer;
 begin
   case Upcase(FUnits) of
-    'M': i:= MM_P_INCH;
-    'I': i:= 1000;
-    'T': i:= 1440;
-    else begin
-      Result := dp;
-      Exit;
-    end;
+    'M': i := MM_P_INCH;
+    'I': i := 1000;
+    'T': i := 1440;
+    else
+      begin
+        Result := dp;
+        Exit;
+      end;
   end;
-  Result:= Trunc(dp * i / LuaPrint.FDPI + 0.5);
+  Result := Trunc(dp * i / LuaPrint.FDPI + 0.5);
 end;
 
 function TLuaPrintObject.GetBrushObject: TLuaBrushObject;
@@ -579,15 +588,15 @@ var
   i : Integer;
 begin
   case Upcase(FUnits) of
-    'M': i:= MM_P_INCH;
-    'I': i:= 1000;
-    'T': i:= 1440;
+    'M': i := MM_P_INCH;
+    'I': i := 1000;
+    'T': i := 1440;
     else begin
       Result := lp;
       Exit;
     end;
   end;
-  Result:= Trunc(lp * LuaPrint.FDPI / i + 0.5);
+  Result := Trunc(lp * LuaPrint.FDPI / i + 0.5);
 end;
 
 procedure TLuaPrintObject.GetFontName(var FontName: string);
@@ -598,7 +607,7 @@ end;
 constructor TLuaPrintObject.Create(L: Plua_State; lp: TLuaPrint);
 begin
   inherited Create(L);
-  LuaPrint:= lp;
+  LuaPrint := lp;
   FUnits := 'M';
 end;
 
@@ -630,11 +639,14 @@ var
   c: Integer;
 begin
   c := lua_gettop(LS);
-  if c < 4 then begin
+  if c < 4 then
+  begin
     LuaPrint.AddOrder(
      Format(PRUN_NAME + '.line(%d,%d)',
      [LP2DP(lua_tointeger(LS, 1)), LP2DP(lua_tointeger(LS, 2))]));
-  end else begin
+  end
+  else
+  begin
     LuaPrint.AddOrder(
      Format(PRUN_NAME + '.line(%d,%d,%d,%d)',
      [LP2DP(lua_tointeger(LS, 1)), LP2DP(lua_tointeger(LS, 2)),
@@ -665,13 +677,13 @@ begin
   ms.LoadFromFile(fn);
   LuaPrint.FResList.Add(ms);
   case lua_gettop(LS) of
-    5: begin
-      LuaPrint.AddOrder(
-       Format(PRUN_NAME + '.drawimage(%d,%d,%d,%d,%d,%s)',
-       [LP2DP(lua_tointeger(LS, 1)), LP2DP(lua_tointeger(LS, 2)),
-        LP2DP(lua_tointeger(LS, 3)), LP2DP(lua_tointeger(LS, 4)),
-        LuaPrint.FResList.Count - 1, str_param(ExtractFileExt(fn))]));
-    end;
+    5:  begin
+          LuaPrint.AddOrder(
+          Format(PRUN_NAME + '.drawimage(%d,%d,%d,%d,%d,%s)',
+          [LP2DP(lua_tointeger(LS, 1)), LP2DP(lua_tointeger(LS, 2)),
+            LP2DP(lua_tointeger(LS, 3)), LP2DP(lua_tointeger(LS, 4)),
+            LuaPrint.FResList.Count-1, str_param(ExtractFileExt(fn))]));
+        end;
   end;
   Result := 0;
 end;
@@ -687,16 +699,16 @@ begin
     LuaPrint.PushCanvas;
     LuaPrint.AddOrder(PRUN_NAME + '.PushCanvas()');
     case lua_gettop(LS) of
-      5: begin
-        DrawPDF(fs, Self, 1,
-         LP2DP(lua_tointeger(LS, 1)), LP2DP(lua_tointeger(LS, 2)),
-         LP2DP(lua_tointeger(LS, 3)), LP2DP(lua_tointeger(LS, 4)));
-      end;
-      6: begin
-        DrawPDF(fs, Self, lua_tointeger(LS, 5),
-         LP2DP(lua_tointeger(LS, 1)), LP2DP(lua_tointeger(LS, 2)),
-         LP2DP(lua_tointeger(LS, 3)), LP2DP(lua_tointeger(LS, 4)));
-      end;
+      5:  begin
+            DrawPDF(fs, Self, 1,
+            LP2DP(lua_tointeger(LS, 1)), LP2DP(lua_tointeger(LS, 2)),
+            LP2DP(lua_tointeger(LS, 3)), LP2DP(lua_tointeger(LS, 4)));
+          end;
+      6:  begin
+            DrawPDF(fs, Self, lua_tointeger(LS, 5),
+            LP2DP(lua_tointeger(LS, 1)), LP2DP(lua_tointeger(LS, 2)),
+            LP2DP(lua_tointeger(LS, 3)), LP2DP(lua_tointeger(LS, 4)));
+          end;
     end;
     LuaPrint.AddOrder(PRUN_NAME + '.PopCanvas()');
     LuaPrint.PopCanvas;
@@ -777,7 +789,8 @@ begin
   except
     i := StringToColor(AValue);
   end;
-  if i >= 0 then begin
+  if i >= 0 then
+  begin
     LPO.LuaPrint.FCanvas.Font.Color := TColor(i);
     LPO.LuaPrint.AddOrder(
      Format(PRUN_NAME + '.font_color(%d)', [i]));
@@ -860,7 +873,8 @@ begin
   except
     i := StringToColor(AValue);
   end;
-  if i >= 0 then begin
+  if i >= 0 then
+  begin
     LPO.LuaPrint.FCanvas.Pen.Color := TColor(i);
     LPO.LuaPrint.AddOrder(
      Format(PRUN_NAME + '.pen_color(%d)', [i]));
@@ -876,7 +890,8 @@ begin
   except
     i := GetEnumValue(TypeInfo(TPenMode), AValue);
   end;
-  if i >= 0 then begin
+  if i >= 0 then
+  begin
     LPO.LuaPrint.FCanvas.Pen.Mode := TPenMode(i);
     LPO.LuaPrint.AddOrder(
      Format(PRUN_NAME + '.pen_mode(%d)', [i]));
@@ -892,7 +907,8 @@ begin
   except
     i := GetEnumValue(TypeInfo(TPenStyle), AValue);
   end;
-  if i >= 0 then begin
+  if i >= 0 then
+  begin
     LPO.LuaPrint.FCanvas.Pen.Style := TPenSTyle(i);
     LPO.LuaPrint.AddOrder(
      Format(PRUN_NAME + '.pen_style(%d)', [i]));
@@ -903,9 +919,9 @@ procedure TLuaPenObject.SetWidth(const AValue: Integer);
 var
   i: Integer;
 begin
-  i:= LPO.LP2DP(AValue);
+  i := LPO.LP2DP(AValue);
   if i < 1 then i := 1;
-  LPO.LuaPrint.FCanvas.Pen.Width:= i;
+  LPO.LuaPrint.FCanvas.Pen.Width := i;
   LPO.LuaPrint.AddOrder(Format(PRUN_NAME + '.pen_width(%d)', [i]));
 end;
 
@@ -942,7 +958,8 @@ begin
   except
     i := StringToColor(AValue);
   end;
-  if i >= 0 then begin
+  if i >= 0 then
+  begin
     LPO.LuaPrint.FCanvas.Brush.Color := TColor(i);
     LPO.LuaPrint.AddOrder(
      Format(PRUN_NAME + '.brush_color(%d)', [i]));
@@ -958,7 +975,8 @@ begin
   except
     i := GetEnumValue(TypeInfo(TBrushStyle), AValue);
   end;
-  if i >= 0 then begin
+  if i >= 0 then
+  begin
     LPO.LuaPrint.FCanvas.Brush.Style := TBrushSTyle(i);
     LPO.LuaPrint.AddOrder(
      Format(PRUN_NAME + '.brush_style(%d)', [i]));
@@ -998,12 +1016,12 @@ end;
 constructor TLuaPrintRunObject.Create(L: Plua_State; lp: TLuaPrint);
 begin
   inherited Create(L);
-  LuaPrint:= lp;
+  LuaPrint := lp;
 {$IFDEF USE_AGG}
-  AggLCLCanvas:= TMyAggCanvas.Create;
-  AggLCLCanvas.Image.PixelFormat:= afpimRGBA32;
-  AggLCLCanvas.AggAntiAliasGamma:= 1.0;
-  rx1:= MaxInt; ry1 := MaxInt; rx2 := 0; ry2 := 0;
+  AggLCLCanvas := TMyAggCanvas.Create;
+  AggLCLCanvas.Image.PixelFormat := afpimRGBA32;
+  AggLCLCanvas.AggAntiAliasGamma := 1.0;
+  rx1 := MaxInt; ry1 := MaxInt; rx2 := 0; ry2 := 0;
 {$ENDIF}
 end;
 
@@ -1017,8 +1035,7 @@ end;
 
 function TLuaPrintRunObject.l4l_TextOut: Integer;
 begin
-  LuaPrint.FCanvas.TextOut(
-   zx(lua_tointeger(LS, 1)), zy(lua_tointeger(LS, 2)), lua_tostring(LS, 3));
+  LuaPrint.FCanvas.TextOut(zx(lua_tointeger(LS, 1)), zy(lua_tointeger(LS, 2)), lua_tostring(LS, 3));
   Result := 0;
 end;
 
@@ -1026,17 +1043,22 @@ function TLuaPrintRunObject.l4l_Rectangle: Integer;
 var
   x1, y1, x2, y2: Integer;
 begin
-  x1:= zx(lua_tointeger(LS, 1));
-  y1:= zy(lua_tointeger(LS, 2));
-  x2:= zx(lua_tointeger(LS, 3));
-  y2:= zy(lua_tointeger(LS, 4));
-  if x1 = x2 then begin
-    LuaPrint.FCanvas.Line(x1, y1, x1, y2);
-  end else if y1 = y2 then begin
-    LuaPrint.FCanvas.Line(x1, y1, x2, y1);
-  end else begin
-    LuaPrint.FCanvas.Rectangle(x1, y1, x2, y2);
-  end;
+  x1 := zx(lua_tointeger(LS, 1));
+  y1 := zy(lua_tointeger(LS, 2));
+  x2 := zx(lua_tointeger(LS, 3));
+  y2 := zy(lua_tointeger(LS, 4));
+  if x1 = x2 then
+    begin
+      LuaPrint.FCanvas.Line(x1, y1, x1, y2);
+    end
+  else if y1 = y2 then
+    begin
+      LuaPrint.FCanvas.Line(x1, y1, x2, y1);
+    end
+  else
+    begin
+      LuaPrint.FCanvas.Rectangle(x1, y1, x2, y2);
+    end;
   Result := 0;
 end;
 
@@ -1053,7 +1075,8 @@ var
   c: Integer;
 begin
   c := lua_gettop(LS);
-  if c < 4 then begin
+  if c < 4 then
+  begin
     LuaPrint.FCanvas.LineTo(
      zx(lua_tointeger(LS, 1)), zy(lua_tointeger(LS, 2)));
   end else begin
@@ -1075,7 +1098,8 @@ var
   c: Integer;
 begin
   c := lua_gettop(LS);
-  if c > 0 then begin
+  if c > 0 then
+  begin
 {$IFDEF USE_AGG}
     x := zx(lua_tointeger(LS, 1));
     y := zy(lua_tointeger(LS, 2));
@@ -1084,32 +1108,36 @@ begin
     if y < ry1 then ry1 := y;
     if x > rx2 then rx2 := x;
     if y > ry2 then ry2 := y;
-    for i := 2 to c div 2 do begin
-      x := zx(lua_tointeger(LS, i*2-1));
-      y := zy(lua_tointeger(LS, i*2));
-      AggLCLCanvas.Path.m_path.line_to(x, y);
-      if x < rx1 then rx1 := x;
-      if y < ry1 then ry1 := y;
-      if x > rx2 then rx2 := x;
-      if y > ry2 then ry2 := y;
-    end;
+    for i := 2 to c div 2 do
+      begin
+        x := zx(lua_tointeger(LS, i*2-1));
+        y := zy(lua_tointeger(LS, i*2));
+        AggLCLCanvas.Path.m_path.line_to(x, y);
+        if x < rx1 then rx1 := x;
+        if y < ry1 then ry1 := y;
+        if x > rx2 then rx2 := x;
+        if y > ry2 then ry2 := y;
+      end;
 {$ELSE}
     l := Length(PPP);
     SetLength(PPP, l + c div 2);
-    for i := 1 to c div 2 do begin
-      PPP[l+i-1] := types.Point(zx(lua_tointeger(LS, i*2-1)), zy(lua_tointeger(LS, i*2)));
-    end;
-    SetLength(PPC, Length(PPC) + 1);
-    PPC[Length(PPC) - 1] := c div 2;
+    for i := 1 to c div 2 do
+      begin
+        PPP[l+i-1] := types.Point(zx(lua_tointeger(LS, i*2-1)), zy(lua_tointeger(LS, i*2)));
+      end;
+    SetLength(PPC, Length(PPC)+1);
+    PPC[Length(PPC)-1] := c div 2;
 {$ENDIF}
-  end else begin
+  end
+  else
+    begin
 {$IFDEF USE_AGG}
-    AggLCLCanvas.Path.m_path.remove_all;
+      AggLCLCanvas.Path.m_path.remove_all;
 {$ELSE}
-    SetLength(PPP, 0);
-    SetLength(PPC, 0);
+      SetLength(PPP, 0);
+      SetLength(PPC, 0);
 {$ENDIF}
-  end;
+    end;
   Result := 0;
 end;
 
@@ -1125,12 +1153,14 @@ var
   pp: PPoint;
 begin
   c := lua_gettop(LS);
-  if c > 0 then begin
+  if c > 0 then
+  begin
     SetLength(p, c div 2);
-    for i := 1 to c div 2 do begin
+    for i := 1 to c div 2 do
+    begin
       p[i-1] := types.Point(zx(lua_tointeger(LS, i*2-1)), zy(lua_tointeger(LS, i*2)));
     end;
-    pp:= AllocMem(0);
+    pp := AllocMem(0);
     try
       PolyBezier2Polyline(p, pp, c, True);
 {$IFDEF USE_AGG}
@@ -1139,7 +1169,8 @@ begin
       if pp^.y < ry1 then ry1 := pp^.y;
       if pp^.x > rx2 then rx2 := pp^.x;
       if pp^.y > ry2 then ry2 := pp^.y;
-      for i := 2 to c do begin
+      for i := 2 to c do
+      begin
         AggLCLCanvas.Path.m_path.line_to((pp+i-1)^.x, (pp+i-1)^.y);
         if (pp+i-1)^.x < rx1 then rx1 := (pp+i-1)^.x;
         if (pp+i-1)^.y < ry1 then ry1 := (pp+i-1)^.y;
@@ -1149,21 +1180,24 @@ begin
 {$ELSE}
       l := Length(PPP);
       SetLength(PPP, l + c);
-      for i := 1 to c do PPP[l+i-1] := (pp+i-1)^;
-      SetLength(PPC, Length(PPC) + 1);
-      PPC[Length(PPC) - 1] := c;
+      for i := 1 to c do
+        PPP[l+i-1] := (pp+i-1)^;
+      SetLength(PPC, Length(PPC)+1);
+      PPC[Length(PPC)-1] := c;
 {$ENDIF}
     finally
       FreeMem(pp);
     end;
-  end else begin
+  end
+  else
+    begin
 {$IFDEF USE_AGG}
-    AggLCLCanvas.Path.m_path.remove_all;
+      AggLCLCanvas.Path.m_path.remove_all;
 {$ELSE}
-    SetLength(PPP, 0);
-    SetLength(PPC, 0);
+      SetLength(PPP, 0);
+      SetLength(PPC, 0);
 {$ENDIF}
-  end;
+    end;
   Result := 0;
 end;
 
@@ -1178,30 +1212,31 @@ begin
   bmp := graphics.TBitmap.Create;
   try
     lw := LuaPrint.FCanvas.Pen.Width;
-    AggLCLCanvas.Pen.AggLineWidth:= lw;
+    AggLCLCanvas.Pen.AggLineWidth := lw;
     AggLCLCanvas.Pen.Color := LuaPrint.FCanvas.Pen.Color;
     case LuaPrint.FCanvas.Pen.EndCap of
-      pecRound: AggLCLCanvas.Pen.AggLineCap:= AGG_CapRound;
-      pecSquare: AggLCLCanvas.Pen.AggLineCap:= AGG_CapSquare;
-      pecFlat: AggLCLCanvas.Pen.AggLineCap:= AGG_CapButt;
+      pecRound: AggLCLCanvas.Pen.AggLineCap := AGG_CapRound;
+      pecSquare: AggLCLCanvas.Pen.AggLineCap := AGG_CapSquare;
+      pecFlat: AggLCLCanvas.Pen.AggLineCap := AGG_CapButt;
     end;
     case LuaPrint.FCanvas.Pen.JoinStyle of
-      pjsRound: AggLCLCanvas.Pen.AggLineJoin:= AGG_JoinRound;
-      pjsBevel: AggLCLCanvas.Pen.AggLineJoin:= AGG_JoinBevel;
-      pjsMiter: AggLCLCanvas.Pen.AggLineJoin:= AGG_JoinMiter;
+      pjsRound: AggLCLCanvas.Pen.AggLineJoin := AGG_JoinRound;
+      pjsBevel: AggLCLCanvas.Pen.AggLineJoin := AGG_JoinBevel;
+      pjsMiter: AggLCLCanvas.Pen.AggLineJoin := AGG_JoinMiter;
     end;
     AggLCLCanvas.Brush.Color := LuaPrint.FCanvas.Brush.Color;
-    AggLCLCanvas.Brush.AggFillEvenOdd:= not w;
+    AggLCLCanvas.Brush.AggFillEvenOdd := not w;
     AggLCLCanvas.Image.SetSize(rx2-rx1+1+lw*2, ry2-ry1+1+lw*2);
     AggLCLCanvas.Erase;
-    for i := 0 to AggLCLCanvas.Path.m_path.total_vertices-1 do begin
-      AggLCLCanvas.Path.m_path.vertex_(i, @x , @y);
+    for i := 0 to AggLCLCanvas.Path.m_path.total_vertices-1 do
+    begin
+      AggLCLCanvas.Path.m_path.vertex_(i, @x ,@y);
       AggLCLCanvas.Path.m_path.modify_vertex(i, x-rx1+lw, y-ry1+lw);
     end;
     AggLCLCanvas.AggDrawPath(flag);
     bmp.LoadFromIntfImage(AggLCLCanvas.Image.IntfImg);
     LuaPrint.FCanvas.Draw(rx1-lw, ry1-lw, bmp);
-    rx1:= MaxInt; ry1 := MaxInt; rx2 := 0; ry2 := 0;
+    rx1 := MaxInt; ry1 := MaxInt; rx2 := 0; ry2 := 0;
   finally
     bmp.Free;
   end;
@@ -1220,7 +1255,8 @@ begin
 {$ELSE}
   {$IFDEF WINDOWS}
   i := ALTERNATE;
-  if lua_toboolean(LS, 1) then i := WINDING;
+  if lua_toboolean(LS, 1) then
+    i := WINDING;
   SetPolyFillMode(LuaPrint.FCanvas.Handle, i);
   PolyPolygon(LuaPrint.FCanvas.Handle, PPP[0], PPC[0], Length(PPC));
   {$ELSE}
@@ -1244,12 +1280,13 @@ begin
 {$ELSE}
   {$IFDEF WINDOWS}
   i := ALTERNATE;
-  if lua_toboolean(LS, 1) then i := WINDING;
+  if lua_toboolean(LS, 1) then
+    i := WINDING;
   SetPolyFillMode(LuaPrint.FCanvas.Handle, i);
   ps := LuaPrint.FCanvas.Pen.Style;
-  LuaPrint.FCanvas.Pen.Style:= psClear;
+  LuaPrint.FCanvas.Pen.Style := psClear;
   PolyPolygon(LuaPrint.FCanvas.Handle, PPP[0], PPC[0], Length(PPC));
-  LuaPrint.FCanvas.Pen.Style:= ps;
+  LuaPrint.FCanvas.Pen.Style := ps;
   {$ELSE}
   // ToDo
   LuaPrint.FCanvas.Polygon(PPP, lua_toboolean(LS, 1));
@@ -1283,7 +1320,7 @@ begin
   g := TPicture.Create;
   try
     ms := TStream(LuaPrint.FResList[lua_tointeger(LS, -2)]);
-    ms.Position:= 0;
+    ms.Position := 0;
     //g.LoadFromStreamWithFileExt(ms, lua_tostring(LS, -1));
     g.LoadFromStream(ms);
     x1 := zx(lua_tointeger(LS, 1));
@@ -1292,14 +1329,17 @@ begin
     y2 := zy(lua_tointeger(LS, 4));
     n := Abs(y2 - y1) / g.Height;
     i := Trunc(g.Width * n);
-    if i < Abs(x2 - x1) then begin
-      x2 := x1 + i;
-      y2 := y1 + Trunc(g.Height * n);
-    end else begin
-      n := Abs(x2 - x1) / g.Width;
-      x2 := x1 + Trunc(g.Width  * n);
-      y2 := y1 + Trunc(g.Height * n);
-    end;
+    if i < Abs(x2 - x1) then
+      begin
+        x2 := x1 + i;
+        y2 := y1 + Trunc(g.Height * n);
+      end
+    else
+      begin
+        n := Abs(x2 - x1) / g.Width;
+        x2 := x1 + Trunc(g.Width  * n);
+        y2 := y1 + Trunc(g.Height * n);
+      end;
     LuaPrint.FCanvas.StretchDraw(types.Rect(x1, y1, x2, y2), g.Graphic);
   finally
     g.Free;
@@ -1377,7 +1417,7 @@ end;
 
 function TLuaPrintRunObject.l4l_pen_width: Integer;
 begin
-  LuaPrint.FCanvas.Pen.Width:= w(lua_tointeger(LS, 1));
+  LuaPrint.FCanvas.Pen.Width := w(lua_tointeger(LS, 1));
   Result := 0;
 end;
 

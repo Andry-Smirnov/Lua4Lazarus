@@ -93,7 +93,7 @@ end;
 constructor TLuaStringsObject.Create(L: Plua_State);
 begin
   inherited Create(L);
-  FStrings:= TStringList.Create;
+  FStrings := TStringList.Create;
 end;
 
 destructor TLuaStringsObject.Destroy;

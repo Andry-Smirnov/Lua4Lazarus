@@ -73,16 +73,17 @@ type
 function Alloc({%H-}ud, ptr: Pointer; {%H-}osize, nsize: size_t) : Pointer; cdecl;
 begin
   try
-    Result:= ptr;
+    Result := ptr;
     ReallocMem(Result, nSize);
   except
-    Result:= nil;
+    Result := nil;
   end;
 end;
 
 procedure hook({%H-}L: plua_State; {%H-}ar: plua_Debug); cdecl;
 begin
-  if TLuaThread(Form1.FThread).Terminated then SysUtils.Abort;
+  if TLuaThread(Form1.FThread).Terminated then
+    SysUtils.Abort;
 end;
 
 { TForm1 }
@@ -92,7 +93,8 @@ var
   L: Plua_State;
   s: string;
 begin
-  if Assigned(FThread) and not TLuaThread(FThread).finished then begin
+  if Assigned(FThread) and not TLuaThread(FThread).finished then
+  begin
     // Stop thread.
     FThread.Free;
     FThread := nil;
@@ -101,26 +103,29 @@ begin
 
   // Start thread.
   Memo2.Clear;
-  L:= lua_newstate(@alloc, nil);
+  L := lua_newstate(@alloc, nil);
   lua_sethook(L, @hook, LUA_MASKLINE, 0);
-  l4l_PushLuaObject(TLuaMyObject.Create(L)); lua_setglobal(L, 'my'); // set global value.
-  s:= Memo1.Text;
-  if luaL_loadbuffer(L, PChar(s), Length(s), 'sample') <> 0 then begin
+  l4l_PushLuaObject(TLuaMyObject.Create(L));
+  lua_setglobal(L, 'my'); // set global value.
+  s := Memo1.Text;
+  if luaL_loadbuffer(L, PChar(s), Length(s), 'sample') <> 0 then
+  begin
     Form1.Memo2.Lines.Add(lua_tostring(L, -1));
-    Form1.Memo2.SelStart:= 0;
-    Form1.Memo2.SelLength:= 0;
+    Form1.Memo2.SelStart := 0;
+    Form1.Memo2.SelLength := 0;
     lua_close(L);
     Exit;
   end;
 
-  if Assigned(FThread) then FThread.Free;
+  if Assigned(FThread) then
+    FThread.Free;
   FThread := TLuaThread.Create(L);
-  Form1.Button1.Caption:= 'Stop';
+  Form1.Button1.Caption := 'Stop';
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  FThread:= nil;
+  FThread := nil;
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -130,10 +135,10 @@ end;
 procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   if Assigned(FThread) then
-    begin
-      FThread.Free;
-      FThread:= nil;
-    end;
+  begin
+    FThread.Free;
+    FThread := nil;
+  end;
 end;
 
 { TLuaThread }
@@ -141,7 +146,7 @@ end;
 procedure TLuaThread.Execute;
 begin
   {$IF FPC_FULLVERSION < 30000}
-  finished:= False;
+  finished := False;
   {$ENDIF}
   try
     try
@@ -161,7 +166,7 @@ begin
     end;
   finally
     {$IF FPC_FULLVERSION < 30000}
-    finished:= True;
+    finished := True;
     {$ENDIF}
     msg := ''; // For economy.
     lua_close(L);
@@ -172,20 +177,20 @@ end;
 constructor TLuaThread.Create(aL: plua_state);
 begin
   L := aL;
-  FreeOnTerminate:= False;
+  FreeOnTerminate := False;
   inherited Create(False);
 end;
 
 procedure TLuaThread.ShowMsg;
 begin
   Form1.Memo2.Lines.Add(msg);
-  Form1.Memo2.SelStart:= 0;
-  Form1.Memo2.SelLength:= 0;
+  Form1.Memo2.SelStart := 0;
+  Form1.Memo2.SelLength := 0;
 end;
 
 procedure TLuaThread.Last;
 begin
-  Form1.Button1.Caption:= 'Start';
+  Form1.Button1.Caption := 'Start';
 end;
 
 destructor TLuaThread.Destroy;
@@ -199,16 +204,16 @@ procedure TLuaMyObject.DoPrint;
 var
   i, c: Integer;
 begin
-  c:= lua_gettop(LS);
-  for i:= 1 to c do
+  c := lua_gettop(LS);
+  for i := 1 to c do
     Form1.Memo2.Lines.Add(lua_tostring(LS, i));
-  Form1.Memo2.SelStart:= 0;
-  Form1.Memo2.SelLength:= 0;
+  Form1.Memo2.SelStart := 0;
+  Form1.Memo2.SelLength := 0;
 end;
 
 procedure TLuaMyObject.DoSetCaption;
 begin
-  Form1.Label1.Caption:= lua_tostring(LS, 1);
+  Form1.Label1.Caption := lua_tostring(LS, 1);
 end;
 
 function TLuaMyObject.l4l_print: Integer;
