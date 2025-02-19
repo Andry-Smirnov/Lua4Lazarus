@@ -110,13 +110,15 @@ var
 begin
   // garbage collection
   i := 0;
-  while i < ThreadList.Count do begin
+  while i < ThreadList.Count do
+  begin
     t := TLuaThread(ThreadList[i]);
     if t.finished then
     begin
       t.Free;
       ThreadList.Delete(i);
-    end else
+    end
+    else
       Inc(i);
   end;
 
@@ -152,7 +154,8 @@ end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
 begin
-  while ThreadList.Count > 0 do begin
+  while ThreadList.Count > 0 do
+  begin
     TLuaThread(ThreadList[0]).Free;
     ThreadList.Delete(0);
   end;
@@ -161,7 +164,8 @@ end;
 
 procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
-  while ThreadList.Count > 0 do begin
+  while ThreadList.Count > 0 do
+  begin
     TLuaThread(ThreadList[0]).Free;
     ThreadList.Delete(0);
   end;
@@ -175,15 +179,16 @@ begin
   // garbage collection
   i := 0;
   while i < ThreadList.Count do
-  begin
-    t := TLuaThread(ThreadList[i]);
-    if t.finished then
     begin
-      t.Free;
-      ThreadList.Delete(i);
-    end else
-      Inc(i);
-  end;
+      t := TLuaThread(ThreadList[i]);
+      if t.finished then
+        begin
+          t.Free;
+          ThreadList.Delete(i);
+        end
+      else
+        Inc(i);
+    end;
 
   Label1.Caption := IntToStr(ThreadList.Count);
 end;
@@ -199,16 +204,19 @@ begin
     //msg := 'Start: ' + IntToStr(Self.FThreadID);
     //Synchronize(@ShowMsg);
     try
-      if lua_pcall(L, 0, 0, 0) <> 0 then Exception.Create('');
+      if lua_pcall(L, 0, 0, 0) <> 0 then
+        Exception.Create('');
     except
-      on E: EAbort do begin
-        msg := 'Abort: ' + IntToStr(Self.FThreadID);
-        Synchronize(@ShowMsg);
-      end;
-      else begin
-        msg := 'Error: ' + IntToStr(Self.FThreadID) + ' : ' + lua_tostring(L, -1);
-        Synchronize(@ShowMsg);
-      end;
+      on E: EAbort do
+        begin
+          msg := 'Abort: ' + IntToStr(Self.FThreadID);
+          Synchronize(@ShowMsg);
+        end;
+      else
+        begin
+          msg := 'Error: ' + IntToStr(Self.FThreadID) + ' : ' + lua_tostring(L, -1);
+          Synchronize(@ShowMsg);
+        end;
     end;
     //msg := 'Finish: ' + IntToStr(Self.FThreadID);
     //Synchronize(@ShowMsg);

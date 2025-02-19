@@ -153,14 +153,16 @@ begin
       if lua_pcall(L, 0, 0, 0) <> 0 then
         Exception.Create('');
     except
-      on E: EAbort do begin
-        msg := 'Abort.';
-        Synchronize(@ShowMsg);
-      end;
-      else begin
-        msg := lua_tostring(L, -1);
-        Synchronize(@ShowMsg);
-      end;
+      on E: EAbort do
+        begin
+          msg := 'Abort.';
+          Synchronize(@ShowMsg);
+        end;
+      else
+        begin
+          msg := lua_tostring(L, -1);
+          Synchronize(@ShowMsg);
+        end;
     end;
   finally
     {$IF FPC_FULLVERSION < 30000}

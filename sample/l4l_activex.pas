@@ -149,9 +149,12 @@ begin
                       else
                         begin
                           // TLuaObject
-                          //if obj is TLuaInteger then begin
+                          //if obj is TLuaInteger then
+                          //begin
                           //  va^ := TLuaInteger(obj).Value;
-                          //end else begin
+                          //end
+                          //else
+                          //begin
                             va^ := VarAsType(va^, varNull);
                           //end;
                         end;
@@ -342,7 +345,7 @@ begin
                   luaL_unref(L, LUA_REGISTRYINDEX, Integer(sink^.EventList.Objects[i]));
                   // Save new function to REGISTRY
                   lua_pushvalue(L, 3);
-                  sink^.EventList.Objects[i]:= TObject(luaL_Ref(L, LUA_REGISTRYINDEX));
+                  sink^.EventList.Objects[i] := TObject(luaL_Ref(L, LUA_REGISTRYINDEX));
                 end
               else
                 begin
@@ -483,7 +486,7 @@ begin
       lua_pop(L, 2);
       Exit;
     end;
-  p1:= lua_touserdata(L, -1);
+  p1 := lua_touserdata(L, -1);
   lua_pop(L, 2);
   if TVarData(p1^).vtype <> varDispatch then
     Exit;

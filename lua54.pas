@@ -911,10 +911,11 @@ var
   n: Integer;
 begin
   n := 0;
-  while lr^.name <> nil do begin
-     inc(n);
-     inc(lr);
-  end;
+  while lr^.name <> nil do
+    begin
+      inc(n);
+      inc(lr);
+    end;
   lua_createtable(L, 0, n);
 end;
 

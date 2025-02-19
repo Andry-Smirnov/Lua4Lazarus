@@ -1021,7 +1021,7 @@ begin
   AggLCLCanvas := TMyAggCanvas.Create;
   AggLCLCanvas.Image.PixelFormat := afpimRGBA32;
   AggLCLCanvas.AggAntiAliasGamma := 1.0;
-  rx1:= MaxInt; ry1 := MaxInt; rx2 := 0; ry2 := 0;
+  rx1 := MaxInt; ry1 := MaxInt; rx2 := 0; ry2 := 0;
 {$ENDIF}
 end;
 
@@ -1035,8 +1035,7 @@ end;
 
 function TLuaPrintRunObject.l4l_TextOut: integer;
 begin
-  LuaPrint.FCanvas.TextOut(
-   zx(lua_tointeger(LS, 1)), zy(lua_tointeger(LS, 2)), lua_tostring(LS, 3));
+  LuaPrint.FCanvas.TextOut(zx(lua_tointeger(LS, 1)), zy(lua_tointeger(LS, 2)), lua_tostring(LS, 3));
   Result := 0;
 end;
 
@@ -1044,19 +1043,22 @@ function TLuaPrintRunObject.l4l_Rectangle: integer;
 var
   x1, y1, x2, y2: integer;
 begin
-  x1:= zx(lua_tointeger(LS, 1));
-  y1:= zy(lua_tointeger(LS, 2));
+  x1 := zx(lua_tointeger(LS, 1));
+  y1 := zy(lua_tointeger(LS, 2));
   x2 := zx(lua_tointeger(LS, 3));
   y2 := zy(lua_tointeger(LS, 4));
   if x1 = x2 then
-  begin
-    LuaPrint.FCanvas.Line(x1, y1, x1, y2);
-  end else if y1 = y2 then
-  begin
-    LuaPrint.FCanvas.Line(x1, y1, x2, y1);
-  end else begin
-    LuaPrint.FCanvas.Rectangle(x1, y1, x2, y2);
-  end;
+    begin
+      LuaPrint.FCanvas.Line(x1, y1, x1, y2);
+    end
+  else if y1 = y2 then
+    begin
+      LuaPrint.FCanvas.Line(x1, y1, x2, y1);
+    end
+  else
+    begin
+      LuaPrint.FCanvas.Rectangle(x1, y1, x2, y2);
+    end;
   Result := 0;
 end;
 
@@ -1234,7 +1236,7 @@ begin
     AggLCLCanvas.AggDrawPath(flag);
     bmp.LoadFromIntfImage(AggLCLCanvas.Image.IntfImg);
     LuaPrint.FCanvas.Draw(rx1-lw, ry1-lw, bmp);
-    rx1:= MaxInt; ry1 := MaxInt; rx2 := 0; ry2 := 0;
+    rx1 := MaxInt; ry1 := MaxInt; rx2 := 0; ry2 := 0;
   finally
     bmp.Free;
   end;

@@ -136,17 +136,19 @@ begin
         end;
 
         if Sender = Button1 then
-        begin
-          lp.Print;
-        end else begin
-          FormPreview := TFormPreview.Create(Self);
-          try
-            FormPreview.LP:= lp;
-            FormPreView.ShowModal;
-          finally
-            FormPreview.Free;
+          begin
+            lp.Print;
+          end
+        else
+          begin
+            FormPreview := TFormPreview.Create(Self);
+            try
+              FormPreview.LP:= lp;
+              FormPreView.ShowModal;
+            finally
+              FormPreview.Free;
+            end;
           end;
-        end;
 
       except
         ShowMessage(lua_tostring(L, -1));
