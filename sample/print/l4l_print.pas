@@ -455,7 +455,7 @@ begin
     FCanvas.Pen.Width := FCanvas.Pen.Width * FPlayDpi * FZoom div (FDPI * 100);
 
     FCanvas.ClipRect := types.Rect(0, 0, z(x)+1, z(y)+1);
-    FCanvas.Clipping:= True;
+    FCanvas.Clipping := True;
     try
       sl := TStringList(FPageList[pageNumber-1]);
       l4l_PushLuaObject(TLuaPrintRunObject.Create(LS, Self));
@@ -470,7 +470,7 @@ begin
         lua_setglobal(LS, PRUN_NAME);
       end;
     finally
-      FCanvas.Clipping:= False;
+      FCanvas.Clipping := False;
     end;
   end;
 end;
