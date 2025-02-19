@@ -93,7 +93,7 @@ end;
 constructor TLuaStringsObject.Create(L: Plua_State);
 begin
   inherited Create(L);
-  FStrings:= TStringList.Create;
+  FStrings := TStringList.Create;
 end;
 
 destructor TLuaStringsObject.Destroy;
@@ -111,19 +111,19 @@ end;
 function TLuaStringsObject.l4l_Insert: integer;
 begin
   FStrings.Insert(lua_tointeger(LS, 1), lua_tostring(LS, 2));
-  Result:=0;
+  Result := 0;
 end;
 
 function TLuaStringsObject.l4l_Delete: integer;
 begin
   FStrings.Delete(lua_tointeger(LS, 1));
-  Result:=0;
+  Result := 0;
 end;
 
 function TLuaStringsObject.l4l_Clear: integer;
 begin
   FStrings.Clear;
-  Result:=0;
+  Result := 0;
 end;
 
 function TLuaStringsObject.l4l_IndexOf: integer;
@@ -135,19 +135,19 @@ end;
 function TLuaStringsObject.l4l_Sort: integer;
 begin
   FStrings.Sort;
-  Result:=0;
+  Result := 0;
 end;
 
 function TLuaStringsObject.l4l_SaveToFile: integer;
 begin
   FStrings.SaveToFile(lua_tostring(LS, 1));
-  Result:=0;
+  Result := 0;
 end;
 
 function TLuaStringsObject.l4l_LoadFromFile: integer;
 begin
   FStrings.LoadFromFile(lua_tostring(LS, 1));
-  Result:=0;
+  Result := 0;
 end;
 
 function TLuaStringsObject.l4l_Strings: integer;

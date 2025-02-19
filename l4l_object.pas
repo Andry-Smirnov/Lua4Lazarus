@@ -72,9 +72,9 @@ function gc(L : Plua_State) : Integer; cdecl;
 var
   p: PPointer;
 begin
-  p:= lua_touserdata(L, 1);
+  p := lua_touserdata(L, 1);
   try TLuaObject(p^).Free; except end;
-  Result:= 0;
+  Result := 0;
 end;
 
 function call(L : Plua_State) : Integer; cdecl;
@@ -84,12 +84,12 @@ var
   method: function:integer of object;
 begin
   lua_getfield(L, 1, FIELD_OBJ);
-  p:= lua_touserdata(L, -1);
+  p := lua_touserdata(L, -1);
   lua_remove(L, -1);
-  obj:= TLuaObject(p^);
+  obj := TLuaObject(p^);
   lua_getfield(L, 1, FIELD_FN);
   lua_remove(L, 1);
-  p:= lua_touserdata(L, -1);
+  p := lua_touserdata(L, -1);
   lua_remove(L, -1);
   TMethod(method).Data := obj;
   TMethod(method).Code := p^;
@@ -110,45 +110,52 @@ var
 begin
   Result := 0;
   lua_getfield(L, 1, FIELD_OBJ);
-  p:= lua_touserdata(L, -1);
-  obj:= TLuaObject(p^);
+  p := lua_touserdata(L, -1);
+  obj := TLuaObject(p^);
   key := lua_tostring(L, 2);
-  if Assigned(obj.MethodAddress(PROP_HEAD + key)) then begin
-    lua_getfield(L, 1, PChar(LowerCase(key)));
-  end else begin
-    try
-      pi := FindPropInfo(obj, PROP_HEAD + LowerCase(key));
-    except
-      luaL_error(L, 'Unknown property: "%s".', PChar(key));
-    end;
-    try
-      case pi^.PropType^.Kind of
-        tkInteger, tkQWord:
-          lua_pushinteger(L, GetOrdProp(obj, pi));
-        tkInt64: lua_pushinteger(L, GetInt64Prop(obj, pi));
-        tkFloat: lua_pushnumber(L, GetFloatProp(obj, pi));
-        tkBool: begin
-          if GetOrdProp(obj, pi) = 0 then
-            lua_pushboolean(L, False)
-          else
-            lua_pushboolean(L, True);
-        end;
-        tkClass: begin
-          o:= GetObjectProp(obj, pi);
-          if o is TLuaObject then begin
-            l4l_PushLuaObject(o as TLuaObject);
-          end else begin
-            lua_pushnil(L);
-          end;
-        end;
-        else begin
-          lua_pushstring(L, PChar(GetStrProp(obj, pi)));
-        end;
+  if Assigned(obj.MethodAddress(PROP_HEAD + key)) then
+    begin
+      lua_getfield(L, 1, PChar(LowerCase(key)));
+    end
+  else
+    begin
+      try
+        pi := FindPropInfo(obj, PROP_HEAD + LowerCase(key));
+      except
+        luaL_error(L, 'Unknown property: "%s".', PChar(key));
       end;
-    except
-      on E: Exception do luaL_error(L, PChar(E.Message));
+      try
+        case pi^.PropType^.Kind of
+          tkInteger,
+          tkQWord: lua_pushinteger(L, GetOrdProp(obj, pi));
+          tkInt64: lua_pushinteger(L, GetInt64Prop(obj, pi));
+          tkFloat: lua_pushnumber(L, GetFloatProp(obj, pi));
+          tkBool: begin
+                    if GetOrdProp(obj, pi) = 0 then
+                      lua_pushboolean(L, False)
+                    else
+                      lua_pushboolean(L, True);
+                  end;
+          tkClass:  begin
+                      o := GetObjectProp(obj, pi);
+                      if o is TLuaObject then
+                        begin
+                          l4l_PushLuaObject(o as TLuaObject);
+                        end 
+                      else
+                        begin
+                          lua_pushnil(L);
+                        end;
+                    end;
+          else
+            begin
+              lua_pushstring(L, PChar(GetStrProp(obj, pi)));
+            end;
+        end;
+      except
+        on E: Exception do luaL_error(L, PChar(E.Message));
+      end;
     end;
-  end;
   Result := 1;
 end;
 
@@ -159,10 +166,10 @@ var
   obj: TLuaObject;
   pi: PPropInfo;
 begin
-  Result:=0;
+  Result := 0;
   lua_getfield(L, 1, FIELD_OBJ);
-  p:= lua_touserdata(L, -1);
-  obj:= TLuaObject(p^);
+  p := lua_touserdata(L, -1);
+  obj := TLuaObject(p^);
   key := lua_tostring(L, 2);
   try
     pi := FindPropInfo(obj, PROP_HEAD + LowerCase(key));
@@ -171,21 +178,25 @@ begin
   end;
   try
     case pi^.PropType^.Kind of
-      tkInteger, tkInt64, tkQWord:
-        SetOrdProp(obj, pi, lua_tointeger(L, 3));
+      tkInteger,
+      tkInt64, 
+      tkQWord: SetOrdProp(obj, pi, lua_tointeger(L, 3));
       tkFloat: SetFloatProp(obj, pi, lua_tonumber(L, 3));
       tkBool: SetOrdProp(obj, pi, Ord(lua_toboolean(L, 3)));
-      tkClass: begin
-        lua_getfield(L, 3, FIELD_OBJ);
-        p:= lua_touserdata(L, -1);
-        if Assigned(p) and Assigned(p^) then begin
-          SetObjectProp(obj, pi, TObject(p^));
-        end else
-          SetObjectProp(obj, pi, TObject(nil));
-      end;
-      else begin
-        SetStrProp(obj, pi, lua_tostring(L, 3));
-      end;
+      tkClass:  begin
+                  lua_getfield(L, 3, FIELD_OBJ);
+                  p := lua_touserdata(L, -1);
+                  if Assigned(p) and Assigned(p^) then
+                    begin
+                      SetObjectProp(obj, pi, TObject(p^));
+                    end
+                  else
+                    SetObjectProp(obj, pi, TObject(nil));
+                end;
+      else
+        begin
+          SetStrProp(obj, pi, lua_tostring(L, 3));
+        end;
     end;
   except
     on E: Exception do luaL_error(L, PChar(E.Message));
@@ -198,17 +209,20 @@ var
   p: PPointer;
   obj: TLuaObject;
 begin
-  Result:= 0;
+  Result := 0;
   lua_getfield(L, 1, FIELD_OBJ);
-  p:= lua_touserdata(L, -1);
-  obj:= TLuaObject(p^);
-  if lua_isnil(L, 3) then begin
-    i := 0;
-  end else begin
-    lua_pushstring(L, FIELD_IC);
-    lua_rawget(L, 1);
-    i:= lua_tointeger(L, -1) + 1;
-  end;
+  p := lua_touserdata(L, -1);
+  obj := TLuaObject(p^);
+  if lua_isnil(L, 3) then
+    begin
+      i := 0;
+    end 
+  else
+    begin
+      lua_pushstring(L, FIELD_IC);
+      lua_rawget(L, 1);
+      i := lua_tointeger(L, -1) + 1;
+    end;
   lua_pushstring(L, FIELD_IC);
   lua_pushinteger(L, i);
   lua_rawset(L, 1);
@@ -237,45 +251,50 @@ var
   s:string;
   cl: TClass;
 begin
-  t:= lua_gettop(obj.LS);
+  t := lua_gettop(obj.LS);
   lua_pushstring(obj.LS, FIELD_OBJ);
-  p:= lua_newuserdata(obj.LS, SizeOf(Pointer));
+  p := lua_newuserdata(obj.LS, SizeOf(Pointer));
   p^:=obj;
-  if lua_getmetatable(obj.LS, -1) = 0 then lua_newtable(obj.LS);
+  if lua_getmetatable(obj.LS, -1) = 0 then
+    lua_newtable(obj.LS);
   lua_pushstring(obj.LS, '__gc');
   lua_pushcfunction(obj.LS, @gc);
   lua_settable(obj.LS, -3);
   lua_setmetatable(obj.LS, -2);
   lua_settable(obj.LS, -3);
 
-  cl:= obj.ClassType;
-  while Assigned(cl) do begin
-    p := Pointer(PAnsiChar(cl) + vmtMethodtable);
-    mt := p^;
-    if Assigned(mt) then begin
-      for i:=0 to mt^.count-1 do begin
-        s:= LowerCase(mt^.entries[i].name^);
-        if Copy(s, 1, 4) <> PROP_HEAD then continue;
-        Delete(s, 1, 4);
-        lua_pushstring(obj.LS, PChar(s));
-        lua_newtable(obj.LS);
-        lua_pushstring(obj.LS, FIELD_FN);
-        p:= lua_newuserdata(obj.LS, SizeOf(Pointer));
-        p^:= mt^.entries[i].addr;
-        lua_settable(obj.LS, -3);
-        lua_newtable(obj.LS);
-        lua_pushstring(obj.LS, '__call');
-        lua_pushcfunction(obj.LS, @call);
-        lua_settable(obj.LS, -3);
-        lua_pushstring(obj.LS, '__index');
-        lua_pushvalue(obj.LS, t); // SuperClass
-        lua_settable(obj.LS, -3);
-        lua_setmetatable(obj.LS, -2);
-        lua_settable(obj.LS, -3);
-      end;
+  cl := obj.ClassType;
+  while Assigned(cl) do
+    begin
+      p := Pointer(PAnsiChar(cl) + vmtMethodtable);
+      mt := p^;
+      if Assigned(mt) then
+        begin
+          for i:=0 to mt^.count-1 do
+            begin
+              s := LowerCase(mt^.entries[i].name^);
+              if Copy(s, 1, 4) <> PROP_HEAD then
+                continue;
+              Delete(s, 1, 4);
+              lua_pushstring(obj.LS, PChar(s));
+              lua_newtable(obj.LS);
+              lua_pushstring(obj.LS, FIELD_FN);
+              p := lua_newuserdata(obj.LS, SizeOf(Pointer));
+              p^ := mt^.entries[i].addr;
+              lua_settable(obj.LS, -3);
+              lua_newtable(obj.LS);
+              lua_pushstring(obj.LS, '__call');
+              lua_pushcfunction(obj.LS, @call);
+              lua_settable(obj.LS, -3);
+              lua_pushstring(obj.LS, '__index');
+              lua_pushvalue(obj.LS, t); // SuperClass
+              lua_settable(obj.LS, -3);
+              lua_setmetatable(obj.LS, -2);
+              lua_settable(obj.LS, -3);
+            end;
+        end;
+      cl := cl.ClassParent;
     end;
-    cl := cl.ClassParent;
-  end;
 
   lua_newtable(obj.LS);
   lua_pushstring(obj.LS, '__newindex');
@@ -298,37 +317,41 @@ end;
 
 function l4l_isobject(L : Plua_State;  n: Integer): boolean;
 begin
-  Result:= l4l_isobject(L, n, TLuaObject);
+  Result := l4l_isobject(L, n, TLuaObject);
 end;
 
 function l4l_isobject(L : Plua_State;  n: Integer; c: TClass): boolean;
 var
   p: PPointer;
 begin
-  Result:= False;
-  if lua_istable(L, n) then begin
-    lua_getfield(L, n, FIELD_OBJ);
-    if not lua_isnil(L, -1) then begin
-      p:= lua_touserdata(L, -1);
-      Result := TObject(p^) is c;
+  Result := False;
+  if lua_istable(L, n) then
+    begin
+      lua_getfield(L, n, FIELD_OBJ);
+      if not lua_isnil(L, -1) then
+        begin
+          p := lua_touserdata(L, -1);
+          Result := TObject(p^) is c;
+        end;
+      lua_remove(L, -1);
     end;
-    lua_remove(L, -1);
-  end;
 end;
 
 function l4l_toobject(L: Plua_State; n: Integer): TLuaObject;
 var
   p: PPointer;
 begin
-  Result:= nil;
-  if lua_istable(L, n) then begin
-    lua_getfield(L, n, FIELD_OBJ);
-    if not lua_isnil(L, -1) then begin
-      p:= lua_touserdata(L, -1);
-      Result := TLuaObject(p^);
+  Result := nil;
+  if lua_istable(L, n) then
+    begin
+      lua_getfield(L, n, FIELD_OBJ);
+      if not lua_isnil(L, -1) then
+        begin
+          p := lua_touserdata(L, -1);
+          Result := TLuaObject(p^);
+        end;
+      lua_remove(L, -1);
     end;
-    lua_remove(L, -1);
-  end;
 end;
 
 { TLuaObject }

@@ -81,10 +81,10 @@ type
 function Alloc({%H-}ud, ptr: Pointer; {%H-}osize, nsize: size_t) : Pointer; cdecl;
 begin
   try
-    Result:= ptr;
+    Result := ptr;
     ReallocMem(Result, nSize);
   except
-    Result:= nil;
+    Result := nil;
   end;
 end;
 
@@ -93,7 +93,7 @@ var
   p: PLuaThread;
 begin
   lua_getfield(L, LUA_REGISTRYINDEX, THREAD_VAR_NAME);
-  p:= lua_touserdata(L, -1);
+  p := lua_touserdata(L, -1);
   Lua_pop(L, 1);
   if p^.Terminated then SysUtils.Abort;
 end;
@@ -109,10 +109,11 @@ var
   p: PLuaThread;
 begin
   // garbage collection
-  i:= 0;
+  i := 0;
   while i < ThreadList.Count do begin
-    t:= TLuaThread(ThreadList[i]);
-    if t.finished then begin
+    t := TLuaThread(ThreadList[i]);
+    if t.finished then
+    begin
       t.Free;
       ThreadList.Delete(i);
     end else
@@ -120,32 +121,33 @@ begin
   end;
 
   // Start New thread.
-  L:= lua_newstate(@alloc, nil);
+  L := lua_newstate(@alloc, nil);
   lua_sethook(L, @hook, LUA_MASKLINE, 0);
   l4l_PushLuaObject(TLuaMyObject.Create(L)); lua_setglobal(L, 'my'); // set global value.
-  s:= Memo1.Text;
-  if luaL_loadbuffer(L, PChar(s), Length(s), 'sample') <> 0 then begin
+  s := Memo1.Text;
+  if luaL_loadbuffer(L, PChar(s), Length(s), 'sample') <> 0 then
+  begin
     Form1.Memo2.Lines.Add(lua_tostring(L, -1));
-    Form1.Memo2.SelStart:= 0;
-    Form1.Memo2.SelLength:= 0;
+    Form1.Memo2.SelStart := 0;
+    Form1.Memo2.SelLength := 0;
     lua_close(L);
     Exit;
   end;
 
   t := TLuaThread.Create(L);
   ThreadList.Add(t);
-  p:= lua_newuserdata(L, SizeOf(Pointer));
-  p^:= t;
+  p := lua_newuserdata(L, SizeOf(Pointer));
+  p^ := t;
   lua_setfield(L, LUA_REGISTRYINDEX, THREAD_VAR_NAME);
 
-  Label1.Caption:= IntToStr(ThreadList.Count);
+  Label1.Caption := IntToStr(ThreadList.Count);
   Memo2.SetFocus;
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  ThreadList:= TObjectList.Create(False);
-  Timer1.Enabled:= True;
+  ThreadList := TObjectList.Create(False);
+  Timer1.Enabled := True;
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -171,17 +173,19 @@ var
   t: TLuaThread;
 begin
   // garbage collection
-  i:= 0;
-  while i < ThreadList.Count do begin
-    t:= TLuaThread(ThreadList[i]);
-    if t.finished then begin
+  i := 0;
+  while i < ThreadList.Count do
+  begin
+    t := TLuaThread(ThreadList[i]);
+    if t.finished then
+    begin
       t.Free;
       ThreadList.Delete(i);
     end else
       Inc(i);
   end;
 
-  Label1.Caption:= IntToStr(ThreadList.Count);
+  Label1.Caption := IntToStr(ThreadList.Count);
 end;
 
 { TLuaThread }
@@ -189,7 +193,7 @@ end;
 procedure TLuaThread.Execute;
 begin
   {$IF FPC_FULLVERSION < 30000}
-  finished:= False;
+  finished := False;
   {$ENDIF}
   try
     //msg := 'Start: ' + IntToStr(Self.FThreadID);
@@ -210,7 +214,7 @@ begin
     //Synchronize(@ShowMsg);
   finally
     {$IF FPC_FULLVERSION < 30000}
-    finished:= True;
+    finished := True;
     {$ENDIF}
     msg := ''; // For economy.
     lua_close(L);
@@ -221,15 +225,15 @@ end;
 constructor TLuaThread.Create(aL: plua_state);
 begin
   L := aL;
-  FreeOnTerminate:= False;
+  FreeOnTerminate := False;
   inherited Create(False);
 end;
 
 procedure TLuaThread.ShowMsg;
 begin
   Form1.Memo2.Lines.Insert(0, msg);
-  Form1.Memo2.SelStart:= 0;
-  Form1.Memo2.SelLength:= 0;
+  Form1.Memo2.SelStart := 0;
+  Form1.Memo2.SelLength := 0;
 end;
 
 procedure TLuaThread.Last;
@@ -248,12 +252,12 @@ var
   i, c: integer;
   s: string;
 begin
-  c:= lua_gettop(LS);
-  s:= '';
-  for i:= 1 to c do s:= s + lua_tostring(LS, i);
+  c := lua_gettop(LS);
+  s := '';
+  for i := 1 to c do s := s + lua_tostring(LS, i);
   Form1.Memo2.Lines.Insert(0, s);
-  Form1.Memo2.SelStart:= 0;
-  Form1.Memo2.SelLength:= 0;
+  Form1.Memo2.SelStart := 0;
+  Form1.Memo2.SelLength := 0;
 end;
 
 function TLuaMyObject.GetID: integer;
@@ -261,9 +265,9 @@ var
   p: PLuaThread;
 begin
   lua_getfield(LS, LUA_REGISTRYINDEX, THREAD_VAR_NAME);
-  p:= lua_touserdata(LS, -1);
+  p := lua_touserdata(LS, -1);
   Lua_pop(LS, 1);
-  Result:= p^.ThreadID;
+  Result := p^.ThreadID;
 end;
 
 function TLuaMyObject.l4l_print: integer;

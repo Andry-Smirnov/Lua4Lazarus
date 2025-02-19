@@ -101,7 +101,7 @@ end;
 
 function TLuaMyUtilsObject.GetNow: string;
 begin
-  Result:= DatetimeToStr(SysUtils.Now, DefaultFormatSettings);
+  Result := DatetimeToStr(SysUtils.Now, DefaultFormatSettings);
 end;
 
 function CreateMyUtilsObject(L : Plua_State) : Integer; cdecl;

@@ -45,7 +45,8 @@ procedure TForm1.FormCreate(Sender: TObject);
 var
   i: integer;
 begin
-  if Printer.Printers.Count <= 0 then begin
+  if Printer.Printers.Count <= 0 then
+  begin
     Button1.Enabled := False;
     Button2.Enabled := False;
     Button3.Enabled := False;
@@ -53,10 +54,11 @@ begin
     Exit;
   end;
 
-  for i := 0 to Printer.Printers.Count-1 do begin
+  for i := 0 to Printer.Printers.Count-1 do
+  begin
     ComboBox1.Items.Add(Printer.Printers[i]);
   end;
-  ComboBox1.ItemIndex:= Printer.PrinterIndex;
+  ComboBox1.ItemIndex := Printer.PrinterIndex;
   ComboBox1Select(nil);
 end;
 
@@ -64,20 +66,22 @@ procedure TForm1.ComboBox1Select(Sender: TObject);
 begin
   Memo1.Clear;
   try
-    Screen.Cursor:= crHourglass;
+    Screen.Cursor := crHourglass;
     try
-      Printer.PrinterIndex:= ComboBox1.ItemIndex;
+      Printer.PrinterIndex := ComboBox1.ItemIndex;
     finally
-      Screen.Cursor:= crDefault;
+      Screen.Cursor := crDefault;
     end;
   except
-    on e: Exception do begin
+    on e: Exception do
+    begin
       ShowMessage(e.Message);
-      Printer.PrinterIndex:= -1;
-      ComboBox1.ItemIndex:= Printer.PrinterIndex;
+      Printer.PrinterIndex := -1;
+      ComboBox1.ItemIndex := Printer.PrinterIndex;
     end;
   end;
-  if Printer.CanPrint then begin
+  if Printer.CanPrint then
+  begin
     Memo1.Lines.Add(Printer.PaperSize.PaperName);
     Memo1.Lines.Add(Format('%d * %d DPI', [Printer.XDPI, Printer.YDPI]));
     Memo1.Lines.Add(Format('(%d, %d), (%d, %d)',
@@ -88,13 +92,14 @@ begin
       Printer.PaperSize.PaperRect.PhysicalRect.Bottom
        -Printer.PaperSize.PaperRect.WorkRect.Bottom]));
   end;
-  Button1.Enabled:= Printer.CanPrint;
+  Button1.Enabled := Printer.CanPrint;
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
-  if PrinterSetupDialog1.Execute then begin
-    ComboBox1.ItemIndex:= Printer.PrinterIndex;
+  if PrinterSetupDialog1.Execute then
+  begin
+    ComboBox1.ItemIndex := Printer.PrinterIndex;
     ComboBox1Select(nil);
   end;
 end;
@@ -102,10 +107,10 @@ end;
 function Alloc({%H-}ud, ptr: Pointer; {%H-}osize, nsize: size_t) : Pointer; cdecl;
 begin
   try
-    Result:= ptr;
+    Result := ptr;
     ReallocMem(Result, nSize);
   except
-    Result:= nil;
+    Result := nil;
   end;
 end;
 
@@ -114,7 +119,7 @@ var
   L: Plua_State;
   lp: TLuaPrint;
 begin
-  L:= lua_newstate(@alloc, nil);
+  L := lua_newstate(@alloc, nil);
   try
     lp := TLuaPrint.Create(L);
     try
@@ -130,10 +135,11 @@ begin
           lp.EndDoc;
         end;
 
-        if Sender = Button1 then begin
+        if Sender = Button1 then
+        begin
           lp.Print;
         end else begin
-          FormPreview:= TFormPreview.Create(Self);
+          FormPreview := TFormPreview.Create(Self);
           try
             FormPreview.LP:= lp;
             FormPreView.ShowModal;

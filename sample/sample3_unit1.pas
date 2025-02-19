@@ -37,21 +37,21 @@ function print_func(L : Plua_State) : Integer; cdecl;
 var
   i, c: integer;
 begin
-  c:= lua_gettop(L);
-  for i:= 1 to c do
+  c := lua_gettop(L);
+  for i := 1 to c do
     Form1.Memo2.Lines.Add(lua_tostring(L, i));
-  Form1.Memo2.SelStart:= 0;
-  Form1.Memo2.SelLength:= 0;
+  Form1.Memo2.SelStart := 0;
+  Form1.Memo2.SelLength := 0;
   Result := 0;
 end;
 
 function Alloc({%H-}ud, ptr: Pointer; {%H-}osize, nsize: size_t) : Pointer; cdecl;
 begin
   try
-    Result:= ptr;
+    Result := ptr;
     ReallocMem(Result, nSize);
   except
-    Result:= nil;
+    Result := nil;
   end;
 end;
 
@@ -61,7 +61,7 @@ var
   s: string;
 begin
   Memo2.Clear;
-  L:= lua_newstate(@alloc, nil);
+  L := lua_newstate(@alloc, nil);
   try
     luaL_openlibs(L);
     lua_register(L, 'print', @print_func);
@@ -69,15 +69,15 @@ begin
     lua_register(L, 'CreateRefType', @CreateRefType);
     l4l_PushLuaObject(TLuaMyUtilsObject.Create(L)); lua_setglobal(L, 'MyUtils');
     try
-      s:= Memo1.Text;
+      s := Memo1.Text;
       if luaL_loadbuffer(L, PChar(s), Length(s), 'sample') <> 0 then
         Raise Exception.Create('');
       if lua_pcall(L, 0, 0, 0) <> 0 then
         Raise Exception.Create('');
     except
       Form1.Memo2.Lines.Add(lua_tostring(L, -1));
-      Form1.Memo2.SelStart:= 0;
-      Form1.Memo2.SelLength:= 0;
+      Form1.Memo2.SelStart := 0;
+      Form1.Memo2.SelLength := 0;
     end;
   finally
     lua_close(L);
